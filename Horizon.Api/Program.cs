@@ -11,6 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.ConfigureAuth(builder.Configuration);
 builder.Services.ConfigureServices();
 builder.Services.ConfigureRepositories();
+builder.Services.ConfigureCommands();
 
 builder.Services.AddScoped<IDB, MySqlDb>();
 

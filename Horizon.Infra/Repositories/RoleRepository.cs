@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Horizon.Domain.Entities;
 using Horizon.Domain.Queries.Responses.Auth;
+using Horizon.Domain.Queries.Responses.Roles;
 using Horizon.Domain.Repositories;
 using Horizon.Infra.Context;
 
@@ -27,7 +28,7 @@ public class RoleRepository : IRoleRepository
             roles.Add(new Role(
                 role.Id,
                 role.Name,
-                role.slug,
+                role.Slug,
                 role.CreatedAt,
                 role.UpdatedAt)
             );
@@ -47,7 +48,7 @@ public class RoleRepository : IRoleRepository
 
         var roles = new List<Role>();
         foreach (var role in result)
-            roles.Add(new Role(role.Id, role.Name, role.slug));
+            roles.Add(new Role(role.Id, role.Name, role.Slug));
 
         return roles;
     }
@@ -65,5 +66,25 @@ public class RoleRepository : IRoleRepository
             createdAt = role.CreatedAt,
             updatedAt = role.UpdatedAt
         });
+    }
+
+    public async Task<IEnumerable<Role>?> GetDefaultAsync()
+    {
+        var sql = "SELECT Id, Name, Slug, IsDefault FROM roles WHERE IsDefault = 1";
+
+        var result = await _db.Connection().QueryAsync<GetDefaultRolesResponse>(sql);
+
+        var roles = new List<Role>();
+        foreach (var role in result)
+        {
+            roles.Add(new Role(
+                role.Id,
+                role.Name,
+                role.Slug,
+                role.IsDefault)
+            );
+        }
+
+        return roles;
     }
 }

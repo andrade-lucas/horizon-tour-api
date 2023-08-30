@@ -13,5 +13,7 @@ public interface IRoleRepository
 
     Task<IEnumerable<Role>?> GetByUserAsync(string userId);
 
+    Task<IEnumerable<Role>?> GetDefaultAsync();
+
     Task CreateAsync(Role role);
 }
