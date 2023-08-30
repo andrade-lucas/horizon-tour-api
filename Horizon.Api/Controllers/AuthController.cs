@@ -1,45 +1,36 @@
-﻿using Horizon.Api.ViewModels.Auth;
+﻿using Horizon.Auth.Command.Inputs;
 using Horizon.Auth.Repositories;
-using Horizon.Auth.Services;
+using Horizon.Auth.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
+using Horizon.Auth.Command.Handlers;
 
 namespace Horizon.Api.Controllers;
 
 [Route("v1/auth")]
 public class AuthController : ControllerBase
 {
-    private readonly AuthRepository _authRepository;
-    
-    public AuthController() 
+    private readonly LoginHandler _loginHandler;
+    private readonly RegisterUserHandler _registerUserHandler;
+
+    public AuthController(IAuthRepository authRepository, ITokenService tokenService)
     {
-        _authRepository = new AuthRepository();
+        _loginHandler = new LoginHandler(authRepository, tokenService);
+        _registerUserHandler = new RegisterUserHandler(authRepository);
     }
-    
+
     [HttpPost("login")]
-    public async Task<IActionResult> Login(
-        [FromBody]LoginViewModel model
-    )
+    public async Task<IActionResult> Login([FromBody] LoginCommand command)
     {
-        var user = _authRepository.GetByCredentials(model.Email, model.Password);
+        var result = await _loginHandler.Handle(command);
 
-        if (user == null) return NotFound(new
-        {
-            success = false,
-            message = "email or password is incorrect"
-        });
-
-        var token = TokenService.GenerateToken(user);
-
-        return Ok(new 
-        {
-            success = true,
-            token
-        });
+        return StatusCode(result.StatusCode, result);
     }
 
     [HttpPost("create-user")]
-    public async Task<IActionResult> CreateUser()
+    public async Task<IActionResult> CreateUser([FromBody] RegisterUserCommand command)
     {
-        return Ok();
+        var result = await _registerUserHandler.Handle(command);
+
+        return StatusCode(result.StatusCode, result);
     }
 }

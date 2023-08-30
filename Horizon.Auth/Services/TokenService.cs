@@ -4,12 +4,13 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using Horizon.Domain.Entities;
 using Horizon.Auth.Extensions;
+using Horizon.Auth.Services.Contracts;
 
 namespace Horizon.Auth.Services;
 
-public static class TokenService
+public class TokenService : ITokenService
 {
-    public static string GenerateToken(User user)
+    public string GenerateToken(User user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes("iuihjtyQg8Ds5T40gvkztkDXdp3qRyxN");

@@ -1,15 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
+using System.Security.Cryptography;
 
 namespace Horizon.Domain.ValueObjects;
 
 public class Password
 {
-    [Required]
-    [MinLength(6)]
     public string Value { get; private set; }
 
     public Password(string value)
-    { 
-        this.Value = value;
+    {
+        Value = value;
     }
 }

@@ -1,10 +1,21 @@
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
+using Horizon.Api.Configuration.Extensions;
+using Horizon.Api.Settings;
+using Horizon.Infra.Context;
 
 var builder = WebApplication.CreateBuilder(args);
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddSwaggerGen();
+builder.Services.AddCors();
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
 
-ConfigureServices(builder.Services);
+//builder.Services.ConfigureAppSettings(builder.Configuration);
+AppSettings.Initialize(builder.Configuration);
+builder.Services.ConfigureAuth(builder.Configuration);
+builder.Services.ConfigureServices();
+builder.Services.ConfigureRepositories();
+
+builder.Services.AddScoped<IDB, MySqlDb>();
 
 var app = builder.Build();
 
@@ -22,37 +33,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-
-static void ConfigureSettings(WebApplication app)
-{
-    // var settings = new Setti
-}
-
-static void ConfigureServices(IServiceCollection services)
-{
-    services.AddCors();
-    services.AddControllers();
-    services.AddEndpointsApiExplorer();
-    
-    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-    services.AddSwaggerGen();
-
-    var key = Encoding.ASCII.GetBytes("iuihjtyQg8Ds5T40gvkztkDXdp3qRyxN");
-    services.AddAuthentication(x => 
-    {
-        x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    })
-    .AddJwtBearer(x => 
-    {
-        x.RequireHttpsMetadata = false;
-        x.SaveToken = true;
-        x.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(key),
-            ValidateIssuer = false,
-            ValidateAudience = false
-        };
-    });
-}

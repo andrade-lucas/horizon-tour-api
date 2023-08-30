@@ -1,8 +1,9 @@
+﻿using Horizon.Shared.Commands;
 using System.ComponentModel.DataAnnotations;
 
-namespace Horizon.Api.ViewModels.Auth;
+namespace Horizon.Auth.Command.Inputs;
 
-public class LoginViewModel
+public class LoginCommand : ICommand
 {
     [Required]
     [EmailAddress]

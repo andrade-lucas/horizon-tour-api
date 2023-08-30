@@ -8,11 +8,13 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.4" />
+    <PackageReference Include="MySqlConnector" Version="2.2.7" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Horizon.Auth\Horizon.Auth.csproj" />
+    <ProjectReference Include="..\Horizon.Infra\Horizon.Infra.csproj" />
   </ItemGroup>
 
 </Project>

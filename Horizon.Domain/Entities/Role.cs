@@ -4,7 +4,6 @@ namespace Horizon.Domain.Entities;
 
 public class Role : Entity
 {
+    public string Name { get; private set; }
     public string Slug { get; private set; }
-    public DateTime CreatedAt { get; private set; }
-    public DateTime UpdatedAt { get; private set; }
 }
