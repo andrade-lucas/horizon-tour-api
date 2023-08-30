@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using Horizon.Auth.Repositories;
 using Horizon.Domain.Entities;
-using Horizon.Domain.Queries.Responses;
+using Horizon.Domain.Queries.Responses.Auth;
 using Horizon.Domain.ValueObjects;
 using Horizon.Infra.Context;
 using System.Data;
@@ -41,8 +41,8 @@ public class AuthRepository : IAuthRepository
     public async Task CreateAsync(User user)
     {
         var result = await _db.Connection().QueryAsync(
-            "INSERT INTO users" +
-            "(Id, FirstName, LastName, NickName, Email, Password, ImageUrl, CreatedAt, UpdatedAt)" +
+            "INSERT INTO users " +
+            "(Id, FirstName, LastName, NickName, Email, Password, ImageUrl, CreatedAt, UpdatedAt) " +
             "VALUES(@id, @firstName, @lastName, @nickName, @email, @password, @imageUrl, @createdAt, @updatedAt);",
             new
             {

@@ -1,14 +1,20 @@
-using Horizon.Api.Settings;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Horizon.Api.Controllers;
 
 public class HomeController : ControllerBase
 {
+    private readonly IConfiguration _configuration;
+
+    public HomeController(IConfiguration configuration)
+    {
+        _configuration = configuration;
+    }
+
     [HttpGet("health")]
     public IActionResult Index()
     {
-        var version = AppSettings.ApiVersion;
+        var version = _configuration.GetValue<string>("ApiVersion");
 
         return Ok(new
         {

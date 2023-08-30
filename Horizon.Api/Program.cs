@@ -1,5 +1,4 @@
 using Horizon.Api.Configuration.Extensions;
-using Horizon.Api.Settings;
 using Horizon.Infra.Context;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,8 +8,6 @@ builder.Services.AddCors();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-//builder.Services.ConfigureAppSettings(builder.Configuration);
-AppSettings.Initialize(builder.Configuration);
 builder.Services.ConfigureAuth(builder.Configuration);
 builder.Services.ConfigureServices();
 builder.Services.ConfigureRepositories();

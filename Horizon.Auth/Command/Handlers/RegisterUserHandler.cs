@@ -25,8 +25,7 @@ public class RegisterUserHandler : ICommandHandler<RegisterUserCommand>
         var user = new User(
             new Name(command.FirstName, command.LastName, command.NickName),
             new Email(command.Email),
-            new Password(passHash),
-            command.Image
+            new Password(passHash)
         );
 
         try

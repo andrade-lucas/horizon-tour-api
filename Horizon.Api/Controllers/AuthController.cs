@@ -3,6 +3,7 @@ using Horizon.Auth.Repositories;
 using Horizon.Auth.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Horizon.Auth.Command.Handlers;
+using Horizon.Domain.Repositories;
 
 namespace Horizon.Api.Controllers;
 
@@ -12,9 +13,9 @@ public class AuthController : ControllerBase
     private readonly LoginHandler _loginHandler;
     private readonly RegisterUserHandler _registerUserHandler;
 
-    public AuthController(IAuthRepository authRepository, ITokenService tokenService)
+    public AuthController(IAuthRepository authRepository, IRoleRepository roleRepository, ITokenService tokenService)
     {
-        _loginHandler = new LoginHandler(authRepository, tokenService);
+        _loginHandler = new LoginHandler(authRepository, roleRepository, tokenService);
         _registerUserHandler = new RegisterUserHandler(authRepository);
     }
 

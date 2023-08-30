@@ -1,4 +1,4 @@
-﻿namespace Horizon.Domain.Queries.Responses;
+﻿namespace Horizon.Domain.Queries.Responses.Auth;
 
 public class GetUserByEmailResponse
 {

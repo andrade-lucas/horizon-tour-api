@@ -12,14 +12,13 @@ public class User : Entity
     public string? ImageUrl { get; private set; }
     public bool Verified { get; private set; }
     public DateTime? Birthdate { get; private set; }
-    public IList<Role> Roles { get; private set; } = new List<Role>();
+    public List<Role> Roles { get; private set; } = new List<Role>();
 
-    public User(Name name, Email email,Password password, string? image)
+    public User(Name name, Email email,Password password)
     {
         Name = name;
         Email = email;
         Password = password;
-        ImageUrl = image;
     }
 
     public User(string id, Name name, Email email, Password password, string? image) : base(id)
@@ -31,14 +30,14 @@ public class User : Entity
     }
 
     /// <summary>
-    /// Add role to the user's roles list.
+    /// Add role range to the user's roles list.
     /// </summary>
     /// <param name="role">
-    public void AddRole(Role role)
+    public void AddRoleRange(IEnumerable<Role> roles)
     {
-        if (role == null) return;
+        if (roles == null || roles.Count() == 0) return;
 
-        Roles.Add(role);
+        Roles.AddRange(roles);
     }
 
     public override string ToString()
