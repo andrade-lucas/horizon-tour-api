@@ -32,11 +32,11 @@ public class RegisterUserHandler : ICommandHandler<RegisterUserCommand>
         {
             await _authRepository.CreateAsync(user);
 
-            return new CommandResult(true, "User created with success", (int)HttpStatusCode.Created);
+            return new CommandResult(true, "Account created with success. Welcome ;D", (int)HttpStatusCode.Created);
         }
         catch (Exception e)
         {
-            return new CommandResult(false, e.Message, (int)HttpStatusCode.InternalServerError);
+            return new CommandResult(false, "Internal server error", (int)HttpStatusCode.InternalServerError, errors: e.Message);
         }
     }
 }
