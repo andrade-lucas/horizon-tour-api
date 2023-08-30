@@ -1,7 +1,9 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Horizon.Api.Controllers;
 
+[AllowAnonymous]
 public class HomeController : ControllerBase
 {
     private readonly IConfiguration _configuration;

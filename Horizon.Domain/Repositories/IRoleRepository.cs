@@ -9,5 +9,9 @@ namespace Horizon.Domain.Repositories;
 
 public interface IRoleRepository
 {
-    Task<IEnumerable<Role>?> GetByUser(string userId);
+    Task<IEnumerable<Role>> GetAllAsync();
+
+    Task<IEnumerable<Role>?> GetByUserAsync(string userId);
+
+    Task CreateAsync(Role role);
 }

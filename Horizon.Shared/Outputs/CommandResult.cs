@@ -10,6 +10,8 @@ public class CommandResult : ICommandResult
     public object? Data { get; set; }
     public object? Errors { get; set; }
 
+    public CommandResult() { }
+
     public CommandResult(bool success, string message, int statusCode, object? data = null, object? errors = null)
     {
         Success = success;

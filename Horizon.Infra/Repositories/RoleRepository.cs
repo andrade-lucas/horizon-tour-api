@@ -15,19 +15,55 @@ public class RoleRepository : IRoleRepository
         _db = db;
     }
 
-    public async Task<IEnumerable<Role>?> GetByUser(string userId)
+    public async Task<IEnumerable<Role>> GetAllAsync()
+    {
+        var sql = "SELECT * FROM roles";
+
+        var result = await _db.Connection().QueryAsync<GetRolesResponse>(sql);
+
+        var roles = new List<Role>();
+        foreach (var role in result)
+        {
+            roles.Add(new Role(
+                role.Id,
+                role.Name,
+                role.slug,
+                role.CreatedAt,
+                role.UpdatedAt)
+            );
+        }
+
+        return roles;
+    }
+
+    public async Task<IEnumerable<Role>?> GetByUserAsync(string userId)
     {
         var sql = "SELECT r.Id, r.Name, r.Slug FROM roles r " +
             "INNER JOIN users_roles ur ON ur.RoleId = r.Id " +
             "INNER JOIN users u ON u.Id = ur.UserId " +
             "WHERE u.Id = @userId;";
 
-        var result = await _db.Connection().QueryAsync<GetRolesByUserResponse>(sql, new { userId });
+        var result = await _db.Connection().QueryAsync<GetRolesResponse>(sql, new { userId });
 
         var roles = new List<Role>();
         foreach (var role in result)
             roles.Add(new Role(role.Id, role.Name, role.slug));
 
         return roles;
+    }
+
+    public async Task CreateAsync(Role role)
+    {
+        var sql = "INSERT INTO roles(Id, Name, Slug, CreatedAt, UpdatedAt) " +
+            "VALUES(@id, @name, @slug, @createdAt, @updatedAt)";
+
+        await _db.Connection().ExecuteAsync(sql, new
+        {
+            id = role.Id,
+            name = role.Name,
+            slug = role.Slug,
+            createdAt = role.CreatedAt,
+            updatedAt = role.UpdatedAt
+        });
     }
 }

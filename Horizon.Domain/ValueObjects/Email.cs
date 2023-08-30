@@ -8,4 +8,9 @@ public class Email
     {
         Address = address;
     }
+
+    public override string ToString()
+    {
+        return Address;
+    }
 }

@@ -40,7 +40,7 @@ public class LoginHandler : ICommandHandler<LoginCommand>
             if (!verifiedPass)
                 return new CommandResult(false, "Email or password is incorrect", (int)HttpStatusCode.BadRequest);
 
-            var roles = await _roleRepository.GetByUser(user.Id.ToString());
+            var roles = await _roleRepository.GetByUserAsync(user.Id.ToString());
 
             if (roles != null) user.AddRoleRange(roles);
 

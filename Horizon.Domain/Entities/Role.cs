@@ -19,4 +19,11 @@ public class Role : Entity
         Name = name;
         Slug = slug;
     }
+
+    public Role(string id, string name, string slug, DateTime createdAt, DateTime updatedAt)
+        : base(id, createdAt, updatedAt)
+    {
+        Name = name;
+        Slug = slug;
+    }
 }

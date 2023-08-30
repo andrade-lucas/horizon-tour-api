@@ -1,8 +1,10 @@
 ﻿namespace Horizon.Domain.Queries.Responses.Auth;
 
-public class GetRolesByUserResponse
+public class GetRolesResponse
 {
     public string Id { get; set; }
     public string Name { get; set; }
     public string slug { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
 }
