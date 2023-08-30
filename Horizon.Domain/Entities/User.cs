@@ -42,6 +42,6 @@ public class User : Entity
 
     public override string ToString()
     {
-        return $"{Name.FirstName} {Name.LastName}";
+        return Name.NickName ?? $"{Name.FirstName} {Name.LastName}";
     }
 }
