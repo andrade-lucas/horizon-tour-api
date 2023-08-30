@@ -1,6 +1,7 @@
 ﻿using Horizon.Auth.Command.Inputs;
 using Horizon.Auth.Repositories;
 using Horizon.Auth.Services.Contracts;
+using Horizon.Domain.Queries.Responses.Auth;
 using Horizon.Domain.Repositories;
 using Horizon.Domain.Security;
 using Horizon.Domain.ValueObjects;
@@ -46,7 +47,19 @@ public class LoginHandler : ICommandHandler<LoginCommand>
 
             var token = _tokenService.GenerateToken(user);
 
-            return new CommandResult(true, "Welcome", (int)HttpStatusCode.OK, new { token });
+            return new CommandResult(true, "Welcome", (int)HttpStatusCode.OK, new 
+            { 
+                token,
+                user = new GetUserAuthResponse
+                {
+                    Id = user.Id.ToString(),
+                    Name = $"{user.Name.FirstName} {user.Name.LastName}",
+                    NickName = user.Name.NickName,
+                    Email = user.Email.ToString(),
+                    ProfileImageUrl = user.ProfileImageUrl,
+                    Verified = user.Verified
+                }
+            });
         }
         catch (Exception ex)
         {

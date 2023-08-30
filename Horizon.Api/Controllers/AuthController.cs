@@ -4,19 +4,20 @@ using Horizon.Auth.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Horizon.Auth.Command.Handlers;
 using Horizon.Domain.Repositories;
+using Horizon.Shared.Commands;
 
 namespace Horizon.Api.Controllers;
 
 [Route("v1/auth")]
 public class AuthController : ControllerBase
 {
-    private readonly LoginHandler _loginHandler;
-    private readonly RegisterUserHandler _registerUserHandler;
+    private readonly ICommandHandler<LoginCommand> _loginHandler;
+    private readonly ICommandHandler<RegisterUserCommand> _registerUserHandler;
 
-    public AuthController(IAuthRepository authRepository, IRoleRepository roleRepository, ITokenService tokenService)
+    public AuthController(ICommandHandler<LoginCommand> loginHandler, ICommandHandler<RegisterUserCommand> registerUserHandler)
     {
-        _loginHandler = new LoginHandler(authRepository, roleRepository, tokenService);
-        _registerUserHandler = new RegisterUserHandler(authRepository);
+        _loginHandler = loginHandler;
+        _registerUserHandler = registerUserHandler;
     }
 
     [HttpPost("login")]
