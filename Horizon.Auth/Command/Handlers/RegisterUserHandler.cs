@@ -7,6 +7,7 @@ using Horizon.Domain.Security;
 using Horizon.Domain.ValueObjects;
 using Horizon.Shared.Commands;
 using Horizon.Shared.Outputs;
+using Microsoft.Extensions.Configuration;
 using System.Net;
 
 namespace Horizon.Auth.Command.Handlers;
@@ -16,12 +17,19 @@ public class RegisterUserHandler : ICommandHandler<RegisterUserCommand>
     private readonly IAuthRepository _authRepository;
     private readonly IRoleRepository _roleRepository;
     private readonly ITokenService _tokenService;
+    private readonly IConfiguration _configuration;
 
-    public RegisterUserHandler(IAuthRepository authRepository, IRoleRepository roleRepository, ITokenService tokenService)
+    public RegisterUserHandler(
+        IAuthRepository authRepository,
+        IRoleRepository roleRepository,
+        ITokenService tokenService,
+        IConfiguration configuration
+     )
     {
         _authRepository = authRepository;
         _roleRepository = roleRepository;
         _tokenService = tokenService;
+        _configuration = configuration;
     }
 
     public async Task<ICommandResult> Handle(RegisterUserCommand command)
@@ -31,6 +39,7 @@ public class RegisterUserHandler : ICommandHandler<RegisterUserCommand>
         var name = new Name(command.FirstName, command.LastName, command.NickName);
         var email = new Email(command.Email);
         var password = new Password(passHash);
+        var profileImage = _configuration.GetValue<string>("DefaultProfileImageUrl");
 
         var emailExists = await _authRepository.EmailExistsAsync(email);
         if (emailExists)
@@ -38,7 +47,7 @@ public class RegisterUserHandler : ICommandHandler<RegisterUserCommand>
 
         var defaultRoles = await _roleRepository.GetDefaultAsync();
 
-        var user = new User(name, email, password);
+        var user = new User(name, email, password, profileImage);
 
         if (defaultRoles != null && defaultRoles.Count() > 0)
             user.AddRoleRange(defaultRoles);

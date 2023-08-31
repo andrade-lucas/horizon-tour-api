@@ -21,14 +21,15 @@ public class UsersRolesRepository : IUsersRolesRepository
             "VALUES(@id, @userId, @roleId, @createdAt, @updatedAt);";
 
         await _db.Connection().ExecuteAsync(sql, new
-        {
-            id = Guid.NewGuid(),
-            userId = user.Id.ToString(),
-            roleId = role.Id.ToString(),
-            createdAt = DateTime.Now,
-            updatedAt = DateTime.Now
-        },
-        transaction: transaction ?? null);
+            {
+                id = Guid.NewGuid(),
+                userId = user.Id.ToString(),
+                roleId = role.Id.ToString(),
+                createdAt = DateTime.Now,
+                updatedAt = DateTime.Now
+            },
+            transaction: transaction ?? null
+        );
     }
 
     public async Task RemoveUserFromRole(User user, Role role, IDbTransaction? transaction = null)

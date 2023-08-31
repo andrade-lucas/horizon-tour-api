@@ -8,17 +8,18 @@ public class User : Entity
     public Name Name { get; private set; }
     public Email Email { get; private set; }
     public Phone? Phone { get; private set; }
-    public Password Password { get; private set; }
+    public Password? Password { get; private set; }
     public string? ProfileImageUrl { get; private set; }
     public bool Verified { get; private set; }
     public DateTime? Birthdate { get; private set; }
     public List<Role> Roles { get; private set; } = new List<Role>();
 
-    public User(Name name, Email email, Password password)
+    public User(Name name, Email email, Password password, string? profileImageUrl = null)
     {
         Name = name;
         Email = email;
         Password = password;
+        ProfileImageUrl = profileImageUrl;
     }
 
     public User(
@@ -37,6 +38,7 @@ public class User : Entity
     {
         Name = name;
         Email = email;
+        Password = password;
         Phone = phone;
         ProfileImageUrl = profileImageUrl;
         Verified = verified;

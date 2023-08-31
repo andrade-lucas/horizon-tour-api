@@ -33,7 +33,7 @@ public class AuthRepository : IAuthRepository
 
     public async Task<User?> GetByEmailAsync(string email)
     {
-        var query = await _db.Connection().QueryAsync<GetUserByEmailResponse>(
+        var result = await _db.Connection().QueryFirstAsync<GetUserByEmailResponse>(
             "SELECT Id, FirstName, LastName, NickName, Email, Password, ProfileImageUrl, Verified FROM users WHERE email = @email",
             new
             {
@@ -41,13 +41,11 @@ public class AuthRepository : IAuthRepository
             }
         );
 
-        var result = query.First();
-
         return new User(
             result.Id,
             new Name(result.FirstName, result.LastName, result.NickName),
             new Email(result.Email),
-            new Password(result.Password),
+            password: new Password(result.Password),
             profileImageUrl: result.ProfileImageUrl,
             verified: result.Verified
         );
@@ -63,8 +61,8 @@ public class AuthRepository : IAuthRepository
         {
             var result = await _db.Connection().ExecuteAsync(
                 "INSERT INTO users " +
-                "(Id, FirstName, LastName, NickName, Email, Password, CreatedAt, UpdatedAt) " +
-                "VALUES(@id, @firstName, @lastName, @nickName, @email, @password, @createdAt, @updatedAt);",
+                "(Id, FirstName, LastName, NickName, Email, Password, ProfileImageUrl, CreatedAt, UpdatedAt) " +
+                "VALUES(@id, @firstName, @lastName, @nickName, @email, @password, @profileImageUrl, @createdAt, @updatedAt);",
                 new
                 {
                     id = user.Id,
@@ -73,6 +71,7 @@ public class AuthRepository : IAuthRepository
                     nickName = user.Name.NickName,
                     email = user.Email.Address,
                     password = user.Password.Value,
+                    profileImageUrl = user.ProfileImageUrl,
                     createdAt = user.CreatedAt,
                     updatedAt = user.UpdatedAt
                 },
