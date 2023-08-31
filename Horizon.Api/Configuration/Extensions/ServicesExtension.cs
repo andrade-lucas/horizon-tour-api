@@ -17,6 +17,7 @@ public static class ServicesExtension
     public static void ConfigureAuth(this IServiceCollection services, IConfiguration configuration)
     {
         var key = Encoding.ASCII.GetBytes(configuration.GetValue<string>("JwtSecret"));
+
         services.AddAuthentication(x =>
         {
             x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

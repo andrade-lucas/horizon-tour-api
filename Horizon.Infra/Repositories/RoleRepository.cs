@@ -1,6 +1,6 @@
 ﻿using Dapper;
 using Horizon.Domain.Entities;
-using Horizon.Domain.Queries.Responses.Auth;
+using Horizon.Auth.Queries.Responses;
 using Horizon.Domain.Queries.Responses.Roles;
 using Horizon.Domain.Repositories;
 using Horizon.Infra.Context;

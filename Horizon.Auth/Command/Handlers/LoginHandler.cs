@@ -1,7 +1,7 @@
 ﻿using Horizon.Auth.Command.Inputs;
 using Horizon.Auth.Repositories;
 using Horizon.Auth.Services.Contracts;
-using Horizon.Domain.Queries.Responses.Auth;
+using Horizon.Auth.Queries.Responses;
 using Horizon.Domain.Repositories;
 using Horizon.Domain.Security;
 using Horizon.Domain.ValueObjects;

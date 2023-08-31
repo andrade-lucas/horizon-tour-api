@@ -14,20 +14,33 @@ public class User : Entity
     public DateTime? Birthdate { get; private set; }
     public List<Role> Roles { get; private set; } = new List<Role>();
 
-    public User(Name name, Email email,Password password)
+    public User(Name name, Email email, Password password)
     {
         Name = name;
         Email = email;
         Password = password;
     }
 
-    public User(string id, Name name, Email email, Password password, string? image, bool verified) : base(id)
+    public User(
+        string id,
+        Name name,
+        Email email,
+        Password? password = null,
+        Phone? phone = null,
+        string? profileImageUrl = null,
+        bool verified = false,
+        DateTime? birthdate = null,
+        DateTime? createdAt = null,
+        DateTime? updatedAt = null,
+        DateTime? deletedAt = null
+     ) : base(id, createdAt, updatedAt, deletedAt)
     {
         Name = name;
         Email = email;
-        Password = password;
-        ProfileImageUrl = image;
+        Phone = phone;
+        ProfileImageUrl = profileImageUrl;
         Verified = verified;
+        Birthdate = birthdate;
     }
 
     /// <summary>

@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using Horizon.Auth.Repositories;
 using Horizon.Domain.Entities;
-using Horizon.Domain.Queries.Responses.Auth;
+using Horizon.Auth.Queries.Responses;
 using Horizon.Domain.Repositories;
 using Horizon.Domain.ValueObjects;
 using Horizon.Infra.Context;
@@ -48,8 +48,8 @@ public class AuthRepository : IAuthRepository
             new Name(result.FirstName, result.LastName, result.NickName),
             new Email(result.Email),
             new Password(result.Password),
-            result.ProfileImageUrl,
-            result.Verified
+            profileImageUrl: result.ProfileImageUrl,
+            verified: result.Verified
         );
     }
 
