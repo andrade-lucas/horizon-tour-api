@@ -9,5 +9,7 @@ public interface IUserRepository
 
     Task<GetCurrentUserResponse> GetByIdAsync(string id);
 
+    Task UploadProfileImageAsync(string userId, string profileImageUrl);
+
     Task DeleteAsync(string id);
 }
