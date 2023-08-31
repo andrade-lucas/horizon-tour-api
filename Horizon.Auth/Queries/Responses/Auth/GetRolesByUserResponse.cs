@@ -1,4 +1,4 @@
-﻿namespace Horizon.Domain.Queries.Responses.Auth;
+﻿namespace Horizon.Auth.Queries.Responses;
 
 public class GetRolesResponse
 {

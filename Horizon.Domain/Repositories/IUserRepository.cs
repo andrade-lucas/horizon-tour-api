@@ -1,17 +1,15 @@
 ﻿using Horizon.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Horizon.Domain.Queries.Responses.Account;
 
 namespace Horizon.Domain.Repositories;
 
 public interface IUserRepository
 {
-    Task<IEnumerable<User>> GetAll();
+    Task<IEnumerable<User>> GetAllAsync();
 
-    Task<User> GetById(Guid id);
+    Task<GetCurrentUserResponse> GetByIdAsync(string id);
 
-    Task Delete(Guid id);
+    Task UploadProfileImageAsync(string userId, string profileImageUrl);
+
+    Task DeleteAsync(string id);
 }

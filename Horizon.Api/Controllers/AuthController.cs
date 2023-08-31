@@ -28,7 +28,7 @@ public class AuthController : ControllerBase
         return StatusCode(result.StatusCode, result);
     }
 
-    [HttpPost("create-user")]
+    [HttpPost("register")]
     public async Task<IActionResult> CreateUser([FromBody] RegisterUserCommand command)
     {
         var result = await _registerUserHandler.Handle(command);
