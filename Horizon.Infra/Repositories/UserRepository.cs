@@ -35,4 +35,16 @@ public class UserRepository : IUserRepository
         return await _db.Connection()
             .QueryFirstAsync<GetCurrentUserResponse>(sql, new { id });
     }
+
+    public async Task UploadProfileImageAsync(string userId, string profileImageUrl)
+    {
+        var sql = "UPDATE users SET ProfileImageUrl = @profileImageUrl " +
+            "WHERE Id = @id";
+
+        await _db.Connection().ExecuteAsync(sql, new
+        {
+            id = userId,
+            profileImageUrl
+        });
+    }
 }

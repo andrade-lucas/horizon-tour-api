@@ -1,5 +1,7 @@
 ﻿using Horizon.Auth.Command.Handlers;
 using Horizon.Auth.Command.Inputs;
+using Horizon.Domain.Commands.Handlers.Account;
+using Horizon.Domain.Commands.Inputs.Account;
 using Horizon.Domain.Queries.Handlers.Account;
 using Horizon.Domain.Queries.Inputs.Account;
 using Horizon.Shared.Commands;
@@ -13,5 +15,6 @@ public static class CommandsExtension
         services.AddTransient<ICommandHandler<LoginCommand>, LoginHandler>();
         services.AddTransient<ICommandHandler<RegisterUserCommand>, RegisterUserHandler>();
         services.AddTransient<ICommandHandler<GetCurrentUserCommand>, GetCurrentUserHandler>();
+        services.AddTransient<ICommandHandler<ChangeProfilePictureCommand>, ChangeProfilePictureHandler>();
     }
 }

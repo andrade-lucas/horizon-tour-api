@@ -1,5 +1,7 @@
 ﻿using Horizon.Auth.Services;
 using Horizon.Auth.Services.Contracts;
+using Horizon.Domain.Services;
+using Horizon.Infra.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -12,6 +14,7 @@ public static class ServicesExtension
     public static void ConfigureServices(this IServiceCollection services)
     {
         services.AddTransient<ITokenService, TokenService>();
+        services.AddTransient<IUploadImageService, UploadImageService>();
     }
 
     public static void ConfigureAuth(this IServiceCollection services, IConfiguration configuration)

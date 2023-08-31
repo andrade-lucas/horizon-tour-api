@@ -1,4 +1,5 @@
-﻿using Horizon.Domain.Queries.Inputs.Account;
+﻿using Horizon.Domain.Commands.Inputs.Account;
+using Horizon.Domain.Queries.Inputs.Account;
 using Horizon.Shared.Commands;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -12,10 +13,15 @@ namespace Horizon.Api.Controllers;
 public class AccountController : ControllerBase
 {
     private readonly ICommandHandler<GetCurrentUserCommand> _currentUserHandler;
+    private readonly ICommandHandler<ChangeProfilePictureCommand> _changeProfileImageHandler;
 
-    public AccountController(ICommandHandler<GetCurrentUserCommand> currentUserHandler)
+    public AccountController(
+        ICommandHandler<GetCurrentUserCommand> currentUserHandler,
+        ICommandHandler<ChangeProfilePictureCommand> changeProfileImageHandler
+    )
     {
         _currentUserHandler = currentUserHandler;
+        _changeProfileImageHandler = changeProfileImageHandler;
     }
 
     [HttpGet]
@@ -27,6 +33,22 @@ public class AccountController : ControllerBase
         };
 
         var result = await _currentUserHandler.Handle(command);
+
+        return StatusCode(result.StatusCode, result);
+    }
+
+    [HttpPost("update")]
+    public async Task<IActionResult> Update()
+    {
+        throw new NotImplementedException();
+    }
+
+    [HttpPut("change-profile-picture")]
+    public async Task<IActionResult> ChangeProfilePicture([FromBody] ChangeProfilePictureCommand command)
+    {
+        command.UserId = User.FindFirst("id")?.Value;
+
+        var result = await _changeProfileImageHandler.Handle(command);
 
         return StatusCode(result.StatusCode, result);
     }
