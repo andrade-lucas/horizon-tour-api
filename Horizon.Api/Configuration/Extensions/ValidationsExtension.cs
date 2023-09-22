@@ -12,6 +12,7 @@ namespace Horizon.Api.Configuration.Extensions
             services.AddValidatorsFromAssemblyContaining<EmailValidator>();
             services.AddValidatorsFromAssemblyContaining<NameValidator>();
             services.AddValidatorsFromAssemblyContaining<PasswordValidator>();
+            services.AddValidatorsFromAssemblyContaining<PhoneValidator>();
         }
     }
 }
