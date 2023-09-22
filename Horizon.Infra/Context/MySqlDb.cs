@@ -19,7 +19,7 @@ public class MySqlDb : IDB
 
     public void Dispose()
     {
-        if (_db.State != ConnectionState.Closed)
+        if (_db != null && _db.State != ConnectionState.Closed)
             _db.Close();
     }
 }

@@ -1,4 +1,5 @@
-﻿using Horizon.Auth.Command.Inputs;
+﻿using FluentValidation;
+using Horizon.Auth.Command.Inputs;
 using Horizon.Auth.Repositories;
 using Horizon.Auth.Services.Contracts;
 using Horizon.Domain.Entities;
@@ -18,18 +19,21 @@ public class RegisterUserHandler : ICommandHandler<RegisterUserCommand>
     private readonly IRoleRepository _roleRepository;
     private readonly ITokenService _tokenService;
     private readonly IConfiguration _configuration;
+    private readonly IValidator<User> _validator;
 
     public RegisterUserHandler(
         IAuthRepository authRepository,
         IRoleRepository roleRepository,
         ITokenService tokenService,
-        IConfiguration configuration
+        IConfiguration configuration,
+        IValidator<User> validator
      )
     {
         _authRepository = authRepository;
         _roleRepository = roleRepository;
         _tokenService = tokenService;
         _configuration = configuration;
+        _validator = validator;
     }
 
     public async Task<ICommandResult> Handle(RegisterUserCommand command)
@@ -39,15 +43,19 @@ public class RegisterUserHandler : ICommandHandler<RegisterUserCommand>
         var name = new Name(command.FirstName, command.LastName, command.NickName);
         var email = new Email(command.Email);
         var password = new Password(passHash);
-        var profileImage = _configuration.GetValue<string>("DefaultProfileImageUrl");
+
+        var user = new User(name, email, password);
+
+        var userValidator = await _validator.ValidateAsync(user);
+
+        if (!userValidator.IsValid)
+            return new CommandResult(false, "Invalid Request", (int)HttpStatusCode.BadRequest, errors: userValidator.ToDictionary());
 
         var emailExists = await _authRepository.EmailExistsAsync(email);
         if (emailExists)
             return new CommandResult(false, "There is already an user with the provided email", (int)HttpStatusCode.BadRequest);
 
         var defaultRoles = await _roleRepository.GetDefaultAsync();
-
-        var user = new User(name, email, password, profileImage);
 
         if (defaultRoles != null && defaultRoles.Count() > 0)
             user.AddRoleRange(defaultRoles);

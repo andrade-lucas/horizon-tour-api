@@ -13,6 +13,8 @@ public static class PasswordHasherSecurity
 
     public static string Hash(string input)
     {
+        if (input == null || input == string.Empty) return string.Empty;
+
         byte[] salt = RandomNumberGenerator.GetBytes(_saltSize);
         byte[] hash = Rfc2898DeriveBytes.Pbkdf2(
             input,
@@ -21,6 +23,7 @@ public static class PasswordHasherSecurity
             _algorithm,
             _keySize
         );
+
         return string.Join(
             segmentDelimiter,
             Convert.ToHexString(hash),
@@ -44,6 +47,7 @@ public static class PasswordHasherSecurity
             algorithm,
             hash.Length
         );
+
         return CryptographicOperations.FixedTimeEquals(inputHash, hash);
     }
 }
