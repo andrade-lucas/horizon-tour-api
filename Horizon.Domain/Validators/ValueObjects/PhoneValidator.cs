@@ -10,6 +10,7 @@ public class PhoneValidator : AbstractValidator<Phone>
     {
         RuleFor(phone => phone.Number)
             .Matches(new Regex("^[0-9]"))
-            .WithMessage("Phone Number is invalid");
+            .WithMessage("Phone Number is invalid")
+            .OverridePropertyName("PhoneNumber");
     }
 }
