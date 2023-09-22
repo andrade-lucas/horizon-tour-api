@@ -13,5 +13,9 @@ public class UserValidator : AbstractValidator<User>
         RuleFor(user => user.Password)
             .SetValidator(new PasswordValidator())
             .When(user => user.Password != null);
+
+        RuleFor(user => user.Phone)
+            .SetValidator(new PhoneValidator())
+            .When(user => user.Phone != null);
     }
 }

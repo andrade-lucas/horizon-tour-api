@@ -6,6 +6,18 @@ public class Phone
 
     public Phone(string number)
     {
-        Number = number;
+        Number = RemoveSpecialCharacters(number);
+    }
+
+    private string RemoveSpecialCharacters(string value)
+    {
+        string newValue = value
+            .Replace("(", "")
+            .Replace(")", "")
+            .Replace("-", "")
+            .Replace(" ", "")
+            .Trim();
+
+        return newValue;
     }
 }
