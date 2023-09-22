@@ -10,6 +10,7 @@ public class PasswordValidator : AbstractValidator<Password>
         RuleFor(pass => pass.Value)
             .NotEmpty()
             .MinimumLength(4)
-            .MaximumLength(512);
+            .MaximumLength(512)
+            .OverridePropertyName("Password");
     }
 }

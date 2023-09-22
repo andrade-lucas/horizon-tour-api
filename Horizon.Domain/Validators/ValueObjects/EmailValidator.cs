@@ -9,6 +9,7 @@ public class EmailValidator : AbstractValidator<Email>
     {
         RuleFor(email => email.Address)
             .EmailAddress()
-            .WithMessage("Invalid email address");
+            .WithMessage("Invalid email address")
+            .OverridePropertyName("Email");
     }
 }

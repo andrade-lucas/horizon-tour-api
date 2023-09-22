@@ -1,9 +1,5 @@
 ﻿using Horizon.Auth.Command.Inputs;
-using Horizon.Auth.Repositories;
-using Horizon.Auth.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
-using Horizon.Auth.Command.Handlers;
-using Horizon.Domain.Repositories;
 using Horizon.Shared.Commands;
 
 namespace Horizon.Api.Controllers;
