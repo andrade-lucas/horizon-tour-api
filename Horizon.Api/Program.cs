@@ -1,5 +1,6 @@
 using Horizon.Api.Configuration.Extensions;
 using Horizon.Infra.Context;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -12,11 +13,16 @@ builder.Services.AddCors(cors =>
         .AllowAnyHeader()
     );
 });
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.ConfigureAuth(builder.Configuration);
 builder.Services.ConfigureServices();
+builder.Services.ConfigureValidations();
 builder.Services.ConfigureRepositories();
 builder.Services.ConfigureCommands();
 
