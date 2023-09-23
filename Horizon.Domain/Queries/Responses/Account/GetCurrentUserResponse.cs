@@ -10,5 +10,5 @@ public class GetCurrentUserResponse
     public string? Phone { get; set; }
     public string? ProfileImageUrl { get; set; }
     public bool Verified { get; set; }
-    public DateTime? Birthdate { get; set; }
+    public DateTime? Birthdate { get ; set; }
 }
