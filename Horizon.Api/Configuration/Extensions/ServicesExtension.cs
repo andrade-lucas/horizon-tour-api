@@ -3,7 +3,6 @@ using Horizon.Auth.Services.Contracts;
 using Horizon.Domain.Services;
 using Horizon.Infra.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 

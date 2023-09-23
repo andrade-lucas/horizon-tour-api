@@ -8,6 +8,7 @@ using Horizon.Domain.ValueObjects;
 using Horizon.Shared.Commands;
 using Horizon.Shared.Outputs;
 using System.Net;
+using FluentValidation;
 
 namespace Horizon.Auth.Command.Handlers;
 
@@ -16,12 +17,22 @@ public class LoginHandler : ICommandHandler<LoginCommand>
     private readonly IAuthRepository _authRepository;
     private readonly ITokenService _tokenService;
     private readonly IRoleRepository _roleRepository;
+    private readonly IValidator<Email> _emailValidator;
+    private readonly IValidator<Password> _passwordValidator;
 
-    public LoginHandler(IAuthRepository authRepository, IRoleRepository roleRepository, ITokenService tokenService)
+    public LoginHandler(
+        IAuthRepository authRepository, 
+        IRoleRepository roleRepository, 
+        ITokenService tokenService,
+        IValidator<Email> emailValidator,
+        IValidator<Password> passwordValidator
+     )
     {
         _authRepository = authRepository;
         _tokenService = tokenService;
         _roleRepository = roleRepository;
+        _emailValidator = emailValidator;
+        _passwordValidator = passwordValidator;
     }
 
     public async Task<ICommandResult> Handle(LoginCommand command)
@@ -30,6 +41,18 @@ public class LoginHandler : ICommandHandler<LoginCommand>
         {
             var email = new Email(command.Email);
             var password = new Password(command.Password);
+
+            var emailValidations = await _emailValidator.ValidateAsync(email);
+            var passValidations = await _passwordValidator.ValidateAsync(password);
+
+            if (!emailValidations.IsValid || !passValidations.IsValid)
+            {
+                var errors = emailValidations.ToDictionary()
+                    .Concat(passValidations.ToDictionary())
+                    .ToDictionary(x => x.Key, x=> x.Value);
+
+                return new CommandResult(false, "Email or password is incorrect", (int)HttpStatusCode.BadRequest, errors: errors);
+            }
 
             var user = await _authRepository.GetByEmailAsync(email.Address);
 
