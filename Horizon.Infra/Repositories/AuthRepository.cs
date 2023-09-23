@@ -33,7 +33,9 @@ public class AuthRepository : IAuthRepository
 
     public async Task<User?> GetByEmailAsync(string email)
     {
-        var result = await _db.Connection().QueryFirstAsync<GetUserByEmailResponse>(
+        try
+        {
+            var result = await _db.Connection().QueryFirstOrDefaultAsync<GetUserByEmailResponse>(
             "SELECT Id, FirstName, LastName, NickName, Email, Password, ProfileImageUrl, Verified FROM users WHERE email = @email",
             new
             {
@@ -41,14 +43,18 @@ public class AuthRepository : IAuthRepository
             }
         );
 
-        return new User(
-            result.Id,
-            new Name(result.FirstName, result.LastName, result.NickName),
-            new Email(result.Email),
-            password: new Password(result.Password),
-            profileImageUrl: result.ProfileImageUrl,
-            verified: result.Verified
-        );
+            return new User(
+                result.Id,
+                new Name(result.FirstName, result.LastName, result.NickName),
+                new Email(result.Email),
+                password: new Password(result.Password),
+                profileImageUrl: result.ProfileImageUrl,
+                verified: result.Verified
+            );
+        } catch
+        {
+            return null;
+        }
     }
 
     public async Task CreateAsync(User user)
