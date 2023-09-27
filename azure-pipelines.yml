@@ -42,6 +42,7 @@ steps:
     displayName: 'Publish Artifacts'
     inputs:
       command: publish
+      projects: '**/*.Api/*.csproj'
       publishWebProjects: true
       arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
       zipAfterPublish: true
