@@ -30,6 +30,7 @@ steps:
     continueOnError: false
     inputs:
       command: 'build'
+      projects: '**/*.Api/*.csproj'
       arguments: '--configuration $(buildConfiguration)'
 
   - task: DotNetCoreCLI@2
