@@ -15,16 +15,19 @@ variables:
 steps:
   - task: UseDotNet@2
     displayName: 'Install .NET Core SDK'
+    continueOnError: false
     inputs:
       version: '7.x'
 
   - task: DotNetCoreCLI@2
     displayName: 'Restore'
+    continueOnError: false
     inputs:
       command: restore
 
   - task: DotNetCoreCLI@2
     displayName: '.NET build $(buildConfiguration)'
+    continueOnError: false
     inputs:
       command: 'build'
       projects: 'Horizon.Api/Horizon.Api.csproj'
@@ -32,6 +35,7 @@ steps:
 
   - task: DotNetCoreCLI@2
     displayName: 'Run App Tests'
+    continueOnError: false
     inputs:
       command: test
       projects: 'Horizon.Test/Horizon.Test.csproj'
@@ -39,6 +43,7 @@ steps:
       
   - task: DotNetCoreCLI@2
     displayName: 'Publish Artifacts'
+    continueOnError: false
     inputs:
       command: publish
       projects: 'Horizon.Api/Horizon.Api.csproj'
@@ -52,6 +57,7 @@ steps:
       artifactName: 'HorizonApi'
 
   - task: AzureRmWebAppDeployment@4
+    continueOnError: false
     displayName: 'Deploy to Azure'
     inputs:
       ConnectionType: 'AzureRM'
