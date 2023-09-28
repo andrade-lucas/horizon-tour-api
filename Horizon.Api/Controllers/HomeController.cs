@@ -20,8 +20,8 @@ public class HomeController : ControllerBase
 
         return Ok(new
         {
-            success = true,
-            version = version
+            Success = true,
+            ApiVersion = version
         });
     }
 }
