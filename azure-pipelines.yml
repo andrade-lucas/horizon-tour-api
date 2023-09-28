@@ -57,5 +57,5 @@ steps:
       ConnectionType: 'AzureRM'
       azureSubscription: 'Pago pelo Uso (cbb3358e-dd46-4cb3-afef-3aa600faa39a)'
       appType: 'webAppLinux'
-      WebAppName: 'horizon-api-teste'
+      WebAppName: 'horizon-tour-api'
       packageForLinux: '$(Build.ArtifactStagingDirectory)/**/*.zip'
