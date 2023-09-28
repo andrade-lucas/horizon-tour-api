@@ -30,7 +30,7 @@ steps:
     continueOnError: false
     inputs:
       command: 'build'
-      projects: '**/*.Api/*.csproj'
+      projects: '**/**/*.csproj'
       arguments: '--configuration $(buildConfiguration)'
 
   - task: DotNetCoreCLI@2
@@ -56,12 +56,12 @@ steps:
   #     targetPath: '$(Build.ArtifactStagingDirectory)'
   #     artifactName: 'HorizonApi'
 
-  - task: AzureRmWebAppDeployment@4
-    displayName: 'Deploy to Azure'
-    continueOnError: false
-    inputs:
-      ConnectionType: 'AzureRM'
-      azureSubscription: 'Pago pelo Uso (cbb3358e-dd46-4cb3-afef-3aa600faa39a)'
-      appType: 'webAppLinux'
-      WebAppName: 'horizon-tour-api'
-      packageForLinux: '$(Build.ArtifactStagingDirectory)/**/*.zip'
+  # - task: AzureRmWebAppDeployment@4
+  #   displayName: 'Deploy to Azure'
+  #   continueOnError: false
+  #   inputs:
+  #     ConnectionType: 'AzureRM'
+  #     azureSubscription: 'Pago pelo Uso (cbb3358e-dd46-4cb3-afef-3aa600faa39a)'
+  #     appType: 'webAppLinux'
+  #     WebAppName: 'horizon-tour-api'
+  #     packageForLinux: '$(Build.ArtifactStagingDirectory)/**/*.zip'
