@@ -21,7 +21,7 @@ public class HomeController : ControllerBase
         return Ok(new
         {
             Success = true,
-            ApiVersion = version
+            Version = version
         });
     }
 }
