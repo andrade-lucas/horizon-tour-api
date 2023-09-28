@@ -10,25 +10,58 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  solution: '**.Api/*.sln'
-  buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
 steps:
-- task: NuGetToolInstaller@1
+  - task: UseDotNet@2
+    displayName: 'Install .NET Core SDK'
+    continueOnError: false
+    inputs:
+      version: '7.x'
 
-- task: NuGetCommand@2
-  inputs:
-    restoreSolution: '$(solution)'
+  - task: DotNetCoreCLI@2
+    displayName: 'Restore'
+    continueOnError: false
+    inputs:
+      command: restore
 
-- task: VSBuild@1
-  inputs:
-    solution: '$(solution)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+  - task: DotNetCoreCLI@2
+    displayName: '.NET build $(buildConfiguration)'
+    continueOnError: false
+    inputs:
+      command: 'build'
+      projects: 'Horizon.Api/Horizon.Api.csproj'
+      arguments: '--configuration $(buildConfiguration)'
 
-- task: VSTest@2
-  inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+  - task: DotNetCoreCLI@2
+    displayName: 'Run App Tests'
+    continueOnError: false
+    inputs:
+      command: test
+      projects: 'Horizon.Test/Horizon.Test.csproj'
+      arguments: '--configuration $(buildConfiguration)'
+      
+  - task: DotNetCoreCLI@2
+    displayName: 'Publish Artifacts'
+    continueOnError: false
+    inputs:
+      command: publish
+      projects: 'Horizon.Api/Horizon.Api.csproj'
+      publishWebProjects: True
+      arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+      zipAfterPublish: True
+
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: '$(Build.ArtifactStagingDirectory)'
+      artifactName: 'HorizonApi'
+
+  - task: AzureRmWebAppDeployment@4
+    continueOnError: false
+    displayName: 'Deploy to Azure'
+    inputs:
+      ConnectionType: 'AzureRM'
+      azureSubscription: 'Pago pelo Uso (cbb3358e-dd46-4cb3-afef-3aa600faa39a)'
+      appType: 'webAppLinux'
+      WebAppName: 'horizon-tour-api'
+      packageForLinux: '$(Build.ArtifactStagingDirectory)/**/*.zip'
