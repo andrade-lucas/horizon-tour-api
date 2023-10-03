@@ -2,9 +2,7 @@
 using Horizon.Domain.Queries.Inputs.Account;
 using Horizon.Shared.Commands;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace Horizon.Api.Controllers;
 
@@ -13,14 +11,17 @@ namespace Horizon.Api.Controllers;
 public class AccountController : ControllerBase
 {
     private readonly ICommandHandler<GetCurrentUserCommand> _currentUserHandler;
+    private readonly ICommandHandler<UpdateAccountCommand> _updateAccountHandler;
     private readonly ICommandHandler<ChangeProfilePictureCommand> _changeProfileImageHandler;
 
     public AccountController(
         ICommandHandler<GetCurrentUserCommand> currentUserHandler,
+        ICommandHandler<UpdateAccountCommand> updateAccountHandler,
         ICommandHandler<ChangeProfilePictureCommand> changeProfileImageHandler
     )
     {
         _currentUserHandler = currentUserHandler;
+        _updateAccountHandler = updateAccountHandler;
         _changeProfileImageHandler = changeProfileImageHandler;
     }
 
@@ -37,10 +38,14 @@ public class AccountController : ControllerBase
         return StatusCode(result.StatusCode, result);
     }
 
-    [HttpPost("update")]
-    public async Task<IActionResult> Update()
+    [HttpPut("update")]
+    public async Task<IActionResult> Update([FromBody] UpdateAccountCommand command)
     {
-        throw new NotImplementedException();
+        command.Id = User.FindFirst("id")?.Value;
+
+        var result = await _updateAccountHandler.Handle(command);
+
+        return StatusCode(result.StatusCode, result);
     }
 
     [HttpPut("change-profile-picture")]

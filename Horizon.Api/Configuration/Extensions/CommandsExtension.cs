@@ -15,6 +15,7 @@ public static class CommandsExtension
         services.AddTransient<ICommandHandler<LoginCommand>, LoginHandler>();
         services.AddTransient<ICommandHandler<RegisterUserCommand>, RegisterUserHandler>();
         services.AddTransient<ICommandHandler<GetCurrentUserCommand>, GetCurrentUserHandler>();
+        services.AddTransient<ICommandHandler<UpdateAccountCommand>, UpdateAccountHandler>();
         services.AddTransient<ICommandHandler<ChangeProfilePictureCommand>, ChangeProfilePictureHandler>();
     }
 }

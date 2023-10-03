@@ -16,6 +16,6 @@ public class UserValidator : AbstractValidator<User>
 
         RuleFor(user => user.Phone)
             .SetValidator(new PhoneValidator())
-            .When(user => user.Phone != null);
+            .When(user => user.Phone != null && user.Phone.Number.Length > 0);
     }
 }
