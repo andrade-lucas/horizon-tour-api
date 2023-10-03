@@ -2,8 +2,8 @@
 using Horizon.Domain.Entities;
 using Horizon.Domain.Queries.Responses.Account;
 using Horizon.Domain.Repositories;
-using Horizon.Domain.ValueObjects;
 using Horizon.Infra.Context;
+using Horizon.Domain.Extensions;
 
 namespace Horizon.Infra.Repositories;
 
@@ -62,6 +62,30 @@ public class UserRepository : IUserRepository
         catch
         {
             return null;
+        }
+    }
+
+    public async Task UpdateUserAsync(User user)
+    {
+        try
+        {
+            var sql = "UPDATE users SET FirstName = @firstName, LastName = @lastName, NickName = @nickName, Phone = @phone, " +
+                "Birthdate = @birthdate, UpdatedAt = @updatedAt WHERE Id = @id";
+
+            await _db.Connection().ExecuteAsync(sql, new
+            {
+                id = user.Id.ToString(),
+                firstName = user.Name.FirstName,
+                lastName = user.Name.LastName,
+                nickName = user.Name.NickName,
+                phone = user.Phone?.Number,
+                birthdate = user?.Birthdate.ToFormatedString(),
+                updatedAt = user?.UpdatedAt.ToFormatedString()
+            });
+        }
+        catch
+        {
+            throw;
         }
     }
 }

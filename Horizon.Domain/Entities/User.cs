@@ -45,6 +45,10 @@ public class User : Entity
         Birthdate = birthdate;
     }
 
+    public void AddPhone(Phone phone) => Phone = phone;
+
+    public void AddBirthDate(DateTime birthdate) => Birthdate = birthdate;
+
     /// <summary>
     /// Add role range to the user's roles list.
     /// </summary>

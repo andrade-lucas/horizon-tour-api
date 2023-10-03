@@ -13,5 +13,7 @@ public interface IUserRepository
 
     Task<string?> GetCurrentUserProfileUrl(string userId);
 
+    Task UpdateUserAsync(User user);
+
     Task DeleteAsync(string id);
 }
