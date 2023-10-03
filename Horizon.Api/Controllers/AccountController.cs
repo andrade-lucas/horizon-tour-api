@@ -48,7 +48,7 @@ public class AccountController : ControllerBase
         return StatusCode(result.StatusCode, result);
     }
 
-    [HttpPut("change-profile-picture")]
+    [HttpPatch("change-profile-picture")]
     public async Task<IActionResult> ChangeProfilePicture([FromBody] ChangeProfilePictureCommand command)
     {
         command.UserId = User.FindFirst("id")?.Value;

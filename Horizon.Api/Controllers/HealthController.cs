@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace Horizon.Api.Controllers;
 
 [AllowAnonymous]
-public class HomeController : ControllerBase
+public class HealthController : ControllerBase
 {
     private readonly IConfiguration _configuration;
 
-    public HomeController(IConfiguration configuration)
+    public HealthController(IConfiguration configuration)
     {
         _configuration = configuration;
     }
