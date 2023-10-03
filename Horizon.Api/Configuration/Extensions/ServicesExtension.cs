@@ -14,6 +14,7 @@ public static class ServicesExtension
     {
         services.AddTransient<ITokenService, TokenService>();
         services.AddTransient<IUploadImageService, UploadImageService>();
+        services.AddTransient<IStorageService, StorageService>();
     }
 
     public static void ConfigureAuth(this IServiceCollection services, IConfiguration configuration)

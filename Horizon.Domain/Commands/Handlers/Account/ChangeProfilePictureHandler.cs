@@ -11,25 +11,36 @@ public class ChangeProfilePictureHandler : ICommandHandler<ChangeProfilePictureC
 {
     private readonly IUserRepository _userRepository;
     private readonly IUploadImageService _uploadImageService;
+    private readonly IStorageService _storageService;
 
-    public ChangeProfilePictureHandler(IUserRepository userRepository, IUploadImageService uploadImageService)
+    public ChangeProfilePictureHandler(IUserRepository userRepository, IUploadImageService uploadImageService, IStorageService storageService)
     {
         _userRepository = userRepository;
         _uploadImageService = uploadImageService;
+        _storageService = storageService;
     }
 
     public async Task<ICommandResult> Handle(ChangeProfilePictureCommand command)
     {
         try
         {
+            var container = "images/users";
+
             var imageName = $"profile_{Guid.NewGuid().ToString()}";
             var imageUri = await _uploadImageService.UploadBase64ImageAsync(
-                command.ImageBase64, 
-                "images/users", 
+                command.ImageBase64,
+                container, 
                 imageName
             );
 
+            var currentProfileImage = await _userRepository.GetCurrentUserProfileUrl(command.UserId);
             await _userRepository.UploadProfileImageAsync(command.UserId, imageUri);
+
+            if (currentProfileImage != null)
+            {
+                var pathSplited = currentProfileImage.Split("/");
+                await _storageService.DeleteAsync(container, pathSplited[pathSplited.Length - 1]);
+            }
 
             return new CommandResult(true, string.Empty, (int)HttpStatusCode.OK, new
             {

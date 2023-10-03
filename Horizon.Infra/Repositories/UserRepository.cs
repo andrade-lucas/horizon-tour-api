@@ -47,4 +47,21 @@ public class UserRepository : IUserRepository
             profileImageUrl
         });
     }
+
+    public async Task<string?> GetCurrentUserProfileUrl(string userId)
+    {
+        try
+        {
+            var sql = "SELECT ProfileImageUrl FROM users WHERE Id = @id";
+
+            return await _db.Connection().QueryFirstAsync<string>(sql, new
+            {
+                id = userId
+            });
+        }
+        catch
+        {
+            return null;
+        }
+    }
 }
