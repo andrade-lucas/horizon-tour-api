@@ -11,5 +11,7 @@ public interface IUserRepository
 
     Task UploadProfileImageAsync(string userId, string profileImageUrl);
 
+    Task<string?> GetCurrentUserProfileUrl(string userId);
+
     Task DeleteAsync(string id);
 }
