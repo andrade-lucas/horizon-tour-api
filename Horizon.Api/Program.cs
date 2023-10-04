@@ -25,6 +25,7 @@ builder.Services.ConfigureServices();
 builder.Services.ConfigureValidations();
 builder.Services.ConfigureRepositories();
 builder.Services.ConfigureCommands();
+builder.Services.ConfigureQueries();
 
 builder.Services.AddScoped<IDB, MySqlDb>();
 

@@ -4,6 +4,9 @@ using Horizon.Domain.Queries.Responses.Account;
 using Horizon.Domain.Repositories;
 using Horizon.Infra.Context;
 using Horizon.Domain.Extensions;
+using Horizon.Domain.Queries.Responses.Users;
+using Horizon.Shared.Helpers;
+using Horizon.Shared.Outputs;
 
 namespace Horizon.Infra.Repositories;
 
@@ -16,9 +19,40 @@ public class UserRepository : IUserRepository
         _db = db;
     }
 
-    public Task<IEnumerable<User>> GetAllAsync()
+    public async Task<PaginationResult<GetAllUsersResponse>> GetAllAsync(string? filter, int page = 1, int pageSize = 20)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var offset = PaginationHelper.GetOffset(page, pageSize);
+            var filterSql = filter != null 
+                ? "AND (FirstName LIKE @filter OR LastName LIKE @filter OR NickName LIKE @filter OR Email LIKE @filter)" 
+                : "";
+
+            var sql = $@"
+                SELECT COUNT(*) AS TOTAL_ROWS FROM users WHERE DeletedAt IS NULL {filterSql}; 
+                
+                SELECT Id, CONCAT(FirstName, ' ', LastName) AS FullName, NickName, Email 
+                FROM users
+                WHERE DeletedAt IS NULL
+                {filterSql}
+                LIMIT @offset, @pageSize;
+            ";
+
+            var multi = await _db.Connection().QueryMultipleAsync(sql, new { filter = $"%{filter}%", offset, pageSize });
+            var totalRows = multi.Read<int>().Single();
+            var rows = multi.Read<GetAllUsersResponse>().ToList();
+
+            return new PaginationResult<GetAllUsersResponse>
+            {
+                TotalRows = totalRows,
+                RowsOnPage = rows.Count,
+                Rows = rows
+            };
+        }
+        catch
+        {
+            throw;
+        }
     }
 
     public async Task<GetCurrentUserResponse> GetByIdAsync(string id)
