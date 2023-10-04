@@ -16,11 +16,6 @@ public class UserRepository : IUserRepository
         _db = db;
     }
 
-    public Task DeleteAsync(string id)
-    {
-        throw new NotImplementedException();
-    }
-
     public Task<IEnumerable<User>> GetAllAsync()
     {
         throw new NotImplementedException();
@@ -81,6 +76,24 @@ public class UserRepository : IUserRepository
                 phone = user.Phone?.Number,
                 birthdate = user?.Birthdate.ToFormatedString(),
                 updatedAt = user?.UpdatedAt.ToFormatedString()
+            });
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
+    public async Task DeleteAsync(string id)
+    {
+        try
+        {
+            var sql = "UPDATE users SET DeletedAt = @deletedAt WHERE Id = @id";
+
+            await _db.Connection().ExecuteAsync(sql, new
+            {
+                id = id,
+                deletedAt = DateTime.Now.ToFormatedString()
             });
         }
         catch
