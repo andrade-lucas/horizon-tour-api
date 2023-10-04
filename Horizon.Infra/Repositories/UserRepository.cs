@@ -42,12 +42,7 @@ public class UserRepository : IUserRepository
             var totalRows = multi.Read<int>().Single();
             var rows = multi.Read<GetAllUsersResponse>().ToList();
 
-            return new PaginationResult<GetAllUsersResponse>
-            {
-                TotalRows = totalRows,
-                RowsOnPage = rows.Count,
-                Rows = rows
-            };
+            return new PaginationResult<GetAllUsersResponse>(totalRows, rows.Count, rows);
         }
         catch
         {
