@@ -1,4 +1,5 @@
-﻿using Horizon.Domain.Queries.Inputs.Roles;
+﻿using Horizon.Domain.Lang.PtBr;
+using Horizon.Domain.Queries.Inputs.Roles;
 using Horizon.Domain.Repositories;
 using Horizon.Shared.Commands;
 using Horizon.Shared.Outputs;
@@ -28,7 +29,7 @@ public class GetAllHandler : ICommandHandler<GetAllCommand>
             return new CommandResult
             {
                 Success = false,
-                Message = "Internal server error",
+                Message = PtBrMessages.Error,
                 StatusCode = (int)HttpStatusCode.InternalServerError,
                 Errors = ex.Message
             };

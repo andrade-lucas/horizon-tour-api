@@ -1,4 +1,5 @@
 ﻿using Horizon.Domain.Commands.Inputs.Account;
+using Horizon.Domain.Lang.PtBr;
 using Horizon.Domain.Repositories;
 using Horizon.Domain.Services;
 using Horizon.Shared.Commands;
@@ -52,7 +53,7 @@ public class ChangeProfilePictureHandler : ICommandHandler<ChangeProfilePictureC
             return new CommandResult
             {
                 Success = false,
-                Message = "Internal server error",
+                Message = PtBrMessages.Error,
                 StatusCode = (int)HttpStatusCode.InternalServerError
             };
         }

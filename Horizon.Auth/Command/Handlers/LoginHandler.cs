@@ -9,6 +9,7 @@ using Horizon.Shared.Commands;
 using Horizon.Shared.Outputs;
 using System.Net;
 using FluentValidation;
+using Horizon.Domain.Lang.PtBr;
 
 namespace Horizon.Auth.Command.Handlers;
 
@@ -51,18 +52,18 @@ public class LoginHandler : ICommandHandler<LoginCommand>
                     .Concat(passValidations.ToDictionary())
                     .ToDictionary(x => x.Key, x=> x.Value);
 
-                return new CommandResult(false, "Email or password is incorrect", (int)HttpStatusCode.BadRequest, errors: errors);
+                return new CommandResult(false, string.Format(PtBrMessages.NotFound, PtBrFields.User), (int)HttpStatusCode.BadRequest, errors: errors);
             }
 
             var user = await _authRepository.GetByEmailAsync(email.Address);
 
             if (user == null)
-                return new CommandResult(false, "Email or password is incorrect", (int)HttpStatusCode.BadRequest);
+                return new CommandResult(false, string.Format(PtBrMessages.NotFound, PtBrFields.User), (int)HttpStatusCode.BadRequest);
 
             var verifiedPass = PasswordHasherSecurity.Verify(password.Value, user.Password.Value);
 
             if (!verifiedPass)
-                return new CommandResult(false, "Email or password is incorrect", (int)HttpStatusCode.BadRequest);
+                return new CommandResult(false, string.Format(PtBrMessages.NotFound, PtBrFields.User), (int)HttpStatusCode.BadRequest);
 
             var roles = await _roleRepository.GetByUserAsync(user.Id.ToString());
 
@@ -70,7 +71,7 @@ public class LoginHandler : ICommandHandler<LoginCommand>
 
             var token = _tokenService.GenerateToken(user);
 
-            return new CommandResult(true, "Welcome", (int)HttpStatusCode.OK, new 
+            return new CommandResult(true, string.Empty, (int)HttpStatusCode.OK, new 
             { 
                 token,
                 user = new GetUserAuthResponse
@@ -86,7 +87,7 @@ public class LoginHandler : ICommandHandler<LoginCommand>
         }
         catch (Exception ex)
         {
-            return new CommandResult(false, "Internal server error", (int)HttpStatusCode.InternalServerError, errors: ex.Message);
+            return new CommandResult(false, PtBrMessages.Error, (int)HttpStatusCode.InternalServerError, errors: ex.Message);
         }
     }
 }

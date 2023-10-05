@@ -1,4 +1,5 @@
-﻿using Horizon.Domain.Queries.Inputs.Users;
+﻿using Horizon.Domain.Lang.PtBr;
+using Horizon.Domain.Queries.Inputs.Users;
 using Horizon.Domain.Repositories;
 using Horizon.Shared.Commands;
 using Horizon.Shared.Outputs;
@@ -28,7 +29,7 @@ namespace Horizon.Domain.Queries.Handlers.Users
             {
                 Console.WriteLine(ex);
 
-                return new CommandResult(false, "Internal server error", (int)HttpStatusCode.InternalServerError);
+                return new CommandResult(false, PtBrMessages.Error, (int)HttpStatusCode.InternalServerError);
             }
         }
     }
