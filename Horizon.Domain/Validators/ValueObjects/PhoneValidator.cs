@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Horizon.Domain.Lang.PtBr;
 using Horizon.Domain.ValueObjects;
 using System.Text.RegularExpressions;
 
@@ -10,7 +11,7 @@ public class PhoneValidator : AbstractValidator<Phone>
     {
         RuleFor(phone => phone.Number)
             .Matches(new Regex("^[0-9]"))
-            .WithMessage("Phone Number is invalid")
+            .WithMessage(string.Format(PtBrMessages.InvalidField, PtBrFields.PhoneNumber))
             .OverridePropertyName("PhoneNumber");
     }
 }

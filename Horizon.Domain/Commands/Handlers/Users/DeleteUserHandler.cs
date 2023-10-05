@@ -1,4 +1,5 @@
 ﻿using Horizon.Domain.Commands.Inputs.Users;
+using Horizon.Domain.Lang.PtBr;
 using Horizon.Domain.Repositories;
 using Horizon.Shared.Commands;
 using Horizon.Shared.Outputs;
@@ -20,17 +21,17 @@ public class DeleteUserHandler : ICommandHandler<DeleteUserCommand>
         try
         {
             if (command.UserId == null || command.UserId == string.Empty)
-                return new CommandResult(false, "Error on deleting user", (int)HttpStatusCode.BadRequest);
+                return new CommandResult(false, PtBrMessages.Error, (int)HttpStatusCode.BadRequest);
 
             await _userRepository.DeleteAsync(command.UserId);
 
-            return new CommandResult(true, "User deleted with success", (int)HttpStatusCode.OK);
+            return new CommandResult(true, string.Format(PtBrMessages.DeletedSuccess, PtBrFields.User), (int)HttpStatusCode.OK);
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex);
 
-            return new CommandResult(false, "Internal server error", (int)HttpStatusCode.InternalServerError);
+            return new CommandResult(false, PtBrMessages.Error, (int)HttpStatusCode.InternalServerError);
         }
     }
 }
