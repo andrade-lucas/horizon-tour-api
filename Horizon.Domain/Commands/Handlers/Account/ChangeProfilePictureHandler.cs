@@ -43,7 +43,7 @@ public class ChangeProfilePictureHandler : ICommandHandler<ChangeProfilePictureC
                 await _storageService.DeleteAsync(container, pathSplited[pathSplited.Length - 1]);
             }
 
-            return new CommandResult(true, string.Empty, (int)HttpStatusCode.OK, new
+            return new CommandResult(true, string.Format(PtBrMessages.UpdatedSuccess, PtBrFields.ProfileImage), (int)HttpStatusCode.OK, new
             {
                 profileImageUrl = imageUri
             });
