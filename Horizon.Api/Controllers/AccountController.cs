@@ -38,7 +38,7 @@ public class AccountController : ControllerBase
         return StatusCode(result.StatusCode, result);
     }
 
-    [HttpPut("update")]
+    [HttpPut]
     public async Task<IActionResult> Update([FromBody] UpdateAccountCommand command)
     {
         command.Id = User.FindFirst("id")?.Value;
