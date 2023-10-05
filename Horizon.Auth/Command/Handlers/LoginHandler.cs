@@ -52,7 +52,7 @@ public class LoginHandler : ICommandHandler<LoginCommand>
                     .Concat(passValidations.ToDictionary())
                     .ToDictionary(x => x.Key, x=> x.Value);
 
-                return new CommandResult(false, string.Format(PtBrMessages.NotFound, PtBrFields.User), (int)HttpStatusCode.BadRequest, errors: errors);
+                return new CommandResult(false, string.Format(PtBrMessages.BadRequest, PtBrFields.User), (int)HttpStatusCode.BadRequest, errors: errors);
             }
 
             var user = await _authRepository.GetByEmailAsync(email.Address);
