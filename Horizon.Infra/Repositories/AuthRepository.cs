@@ -36,7 +36,8 @@ public class AuthRepository : IAuthRepository
         try
         {
             var result = await _db.Connection().QueryFirstOrDefaultAsync<GetUserByEmailResponse>(
-            "SELECT Id, FirstName, LastName, NickName, Email, Password, ProfileImageUrl, Verified FROM users WHERE email = @email",
+            "SELECT Id, FirstName, LastName, NickName, Email, Password, ProfileImageUrl, Verified FROM users " +
+            "WHERE email = @email AND DeletedAt IS NULL",
             new
             {
                 email = email
