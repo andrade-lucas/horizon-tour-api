@@ -29,10 +29,11 @@ public class UpdateAccountHandler : ICommandHandler<UpdateAccountCommand>
 
             var name = new Name(command.FirstName, command.LastName, command.NickName);
             var email = new Email(user.Email);
-            var phone = new Phone(command.Phone);
             var entity = new User(command.Id, name, email, updatedAt: DateTime.Now);
-            entity.AddPhone(phone);
+
             entity.AddBirthDate(command.Birthdate);
+
+            if (command.Phone != null) entity.AddPhone(new Phone(command.Phone));
 
             var validate = await _userValidator.ValidateAsync(entity);
             if (!validate.IsValid)
@@ -40,7 +41,7 @@ public class UpdateAccountHandler : ICommandHandler<UpdateAccountCommand>
 
             await _userRepository.UpdateUserAsync(entity);
 
-            return new CommandResult(true, string.Format(PtBrMessages.UpdatedSuccess, PtBrFields.User), (int)HttpStatusCode.OK);
+            return new CommandResult(true, string.Format(PtBrMessages.UpdatedSuccess, PtBrFields.User), (int)HttpStatusCode.OK, data: command);
         }
         catch (Exception ex)
         {

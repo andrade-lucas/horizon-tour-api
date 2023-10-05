@@ -14,6 +14,6 @@ public class NameValidator : AbstractValidator<Name>
             .MaximumLength(100).WithMessage(string.Format(PtBrMessages.MaxLength, PtBrFields.FirstName, 100));
 
         RuleFor(name => name.LastName).MaximumLength(100).WithMessage(string.Format(PtBrMessages.MaxLength, PtBrFields.LastName, 100));
-        RuleFor(name => name.NickName).MaximumLength(10).WithMessage(string.Format(PtBrMessages.MaxLength, PtBrFields.NickName, 10)); ;
+        RuleFor(name => name.NickName).MaximumLength(50).WithMessage(string.Format(PtBrMessages.MaxLength, PtBrFields.NickName, 50)); ;
     }
 }

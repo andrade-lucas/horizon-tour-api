@@ -11,6 +11,8 @@ public class Phone
 
     private string RemoveSpecialCharacters(string value)
     {
+        if (value == null) return value;
+
         string newValue = value
             .Replace("(", "")
             .Replace(")", "")
