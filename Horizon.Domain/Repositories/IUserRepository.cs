@@ -7,7 +7,7 @@ namespace Horizon.Domain.Repositories;
 
 public interface IUserRepository
 {
-    Task<PaginationResult<GetAllUsersResponse>> GetAllAsync(string? filter, int page = 1, int pageSize = 20);
+    Task<PaginationResult<GetAllUsersResponse>> GetAllAsync(string? filter, int page = 0, int pageSize = 20);
 
     Task<GetCurrentUserResponse> GetByIdAsync(string id);
 
