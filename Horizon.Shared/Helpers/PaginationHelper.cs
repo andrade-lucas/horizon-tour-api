@@ -4,7 +4,7 @@
     {
         public static int GetOffset(int page, int pageSize)
         {
-            return (page - 1) * pageSize;
+            return page * pageSize;
         }
     }
 }

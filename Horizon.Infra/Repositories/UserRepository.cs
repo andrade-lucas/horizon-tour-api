@@ -19,7 +19,7 @@ public class UserRepository : IUserRepository
         _db = db;
     }
 
-    public async Task<PaginationResult<GetAllUsersResponse>> GetAllAsync(string? filter, int page = 1, int pageSize = 20)
+    public async Task<PaginationResult<GetAllUsersResponse>> GetAllAsync(string? filter, int page = 0, int pageSize = 20)
     {
         try
         {
@@ -31,7 +31,7 @@ public class UserRepository : IUserRepository
             var sql = $@"
                 SELECT COUNT(*) AS TOTAL_ROWS FROM users WHERE DeletedAt IS NULL {filterSql}; 
                 
-                SELECT Id, CONCAT(FirstName, ' ', LastName) AS FullName, NickName, Email 
+                SELECT Id, CONCAT(FirstName, ' ', LastName) AS FullName, NickName, Email, Verified, ProfileImageUrl 
                 FROM users
                 WHERE DeletedAt IS NULL
                 {filterSql}

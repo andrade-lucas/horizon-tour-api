@@ -6,4 +6,6 @@ public class GetAllUsersResponse
     public string FullName { get; set; }
     public string NickName { get; set; }
     public string Email { get; set; }
+    public bool Verified { get; set; }
+    public string ProfileImageUrl { get; set; }
 }
