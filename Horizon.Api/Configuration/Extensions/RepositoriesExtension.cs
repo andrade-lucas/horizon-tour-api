@@ -12,5 +12,7 @@ public static class RepositoriesExtension
         services.AddTransient<IRoleRepository, RoleRepository>();
         services.AddTransient<IUsersRolesRepository, UsersRolesRepository>();
         services.AddTransient<IUserRepository, UserRepository>();
+        services.AddTransient<ICityRepository, CityRepository>();
+        services.AddTransient<IPlaceRepository, PlaceRepository>();
     }
 }

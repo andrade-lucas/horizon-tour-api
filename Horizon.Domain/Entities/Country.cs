@@ -12,6 +12,11 @@ namespace Horizon.Domain.Entities
             Name = name;
         }
 
+        public Country(string id, string name) : base(id)
+        {
+            Name = name;
+        }
+
         public void AddAcronym(string acronym) => Acronym = acronym;
     }
 }
