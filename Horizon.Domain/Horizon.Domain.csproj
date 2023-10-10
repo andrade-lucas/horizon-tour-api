@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="valueobjects\README.md" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.7.1" />
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="7.0.10" />
   </ItemGroup>

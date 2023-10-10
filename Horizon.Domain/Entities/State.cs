@@ -14,5 +14,11 @@ public class State : Entity
         UF = uf;
     }
 
+    public State(string id, string name, string uf) : base(id)
+    {
+        Name = name;
+        UF = uf;
+    }
+
     public void AddCountry(Country country) => Country = country;
 }

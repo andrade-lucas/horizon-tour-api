@@ -15,6 +15,11 @@ public class City : Entity
         Name = name;
     }
 
+    public City(string id, string name) : base(id)
+    {
+        Name = name;
+    }
+
     public void AddState(State state) => State = state;
 
     public void AddTimeZone(string timezone) => TimeZone = timezone;
