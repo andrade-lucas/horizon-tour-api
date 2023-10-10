@@ -1,25 +1,23 @@
 ﻿using Horizon.Auth.Command.Inputs;
 using Microsoft.AspNetCore.Mvc;
-using Horizon.Shared.Commands;
+using MediatR;
 
 namespace Horizon.Api.Controllers;
 
 [Route("v1/auth")]
 public class AuthController : ControllerBase
 {
-    private readonly ICommandHandler<LoginCommand> _loginHandler;
-    private readonly ICommandHandler<RegisterUserCommand> _registerUserHandler;
+    private readonly IMediator _mediator;
 
-    public AuthController(ICommandHandler<LoginCommand> loginHandler, ICommandHandler<RegisterUserCommand> registerUserHandler)
+    public AuthController(IMediator mediator)
     {
-        _loginHandler = loginHandler;
-        _registerUserHandler = registerUserHandler;
+        _mediator = mediator;
     }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginCommand command)
     {
-        var result = await _loginHandler.Handle(command);
+        var result = await _mediator.Send(command);
 
         return StatusCode(result.StatusCode, result);
     }
@@ -27,7 +25,7 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> CreateUser([FromBody] RegisterUserCommand command)
     {
-        var result = await _registerUserHandler.Handle(command);
+        var result = await _mediator.Send(command);
 
         return StatusCode(result.StatusCode, result);
     }
