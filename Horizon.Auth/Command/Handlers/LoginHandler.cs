@@ -10,10 +10,11 @@ using Horizon.Shared.Outputs;
 using System.Net;
 using FluentValidation;
 using Horizon.Domain.Lang.PtBr;
+using MediatR;
 
 namespace Horizon.Auth.Command.Handlers;
 
-public class LoginHandler : ICommandHandler<LoginCommand>
+public class LoginHandler : IRequestHandler<LoginCommand, ICommandResult>
 {
     private readonly IAuthRepository _authRepository;
     private readonly ITokenService _tokenService;
@@ -36,7 +37,7 @@ public class LoginHandler : ICommandHandler<LoginCommand>
         _passwordValidator = passwordValidator;
     }
 
-    public async Task<ICommandResult> Handle(LoginCommand command)
+    public async Task<ICommandResult> Handle(LoginCommand command, CancellationToken cancellationToken)
     {
         try
         {

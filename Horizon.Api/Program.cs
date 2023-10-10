@@ -1,4 +1,5 @@
 using Horizon.Api.Configuration.Extensions;
+using Horizon.Auth;
 using Horizon.Infra.Context;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,8 +18,11 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.SuppressModelStateInvalidFilter = true;
 });
+//builder.Services.AddMediatR(conf => conf.RegisterServicesFromAssembly(typeof(Program).Assembly));
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddAuth();
 
 builder.Services.ConfigureAuth(builder.Configuration);
 builder.Services.ConfigureServices();
