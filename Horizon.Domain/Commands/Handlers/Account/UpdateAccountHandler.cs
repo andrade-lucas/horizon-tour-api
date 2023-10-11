@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Horizon.Domain.Commands.Inputs.Account;
 using Horizon.Domain.Entities;
-using Horizon.Domain.Lang.PtBr;
+using Horizon.Shared.Messages;
 using Horizon.Domain.Repositories;
 using Horizon.Domain.ValueObjects;
 using Horizon.Shared.Contracts;
@@ -38,11 +38,11 @@ public class UpdateAccountHandler : IRequestHandler<UpdateAccountCommand, IResul
 
             var validate = await _userValidator.ValidateAsync(entity);
             if (!validate.IsValid)
-                return new CommandResult(false, PtBrMessages.BadRequest, (int)HttpStatusCode.BadRequest, errors: validate.ToDictionary());
+                return new CommandResult(false, Messages.BadRequest, (int)HttpStatusCode.BadRequest, errors: validate.ToDictionary());
 
             await _userRepository.UpdateUserAsync(entity);
 
-            return new CommandResult(true, string.Format(PtBrMessages.UpdatedSuccess, PtBrFields.User), (int)HttpStatusCode.OK, data: command);
+            return new CommandResult(true, string.Format(Messages.UpdatedSuccess, Fields.User), (int)HttpStatusCode.OK, data: command);
         }
         catch (Exception ex)
         {
@@ -51,7 +51,7 @@ public class UpdateAccountHandler : IRequestHandler<UpdateAccountCommand, IResul
             return new CommandResult
             {
                 Success = false,
-                Message = PtBrMessages.Error,
+                Message = Messages.Error,
                 StatusCode = (int)HttpStatusCode.InternalServerError
             };
         }

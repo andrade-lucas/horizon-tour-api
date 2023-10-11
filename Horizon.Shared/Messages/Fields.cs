@@ -1,6 +1,6 @@
-﻿namespace Horizon.Domain.Lang.PtBr;
+﻿namespace Horizon.Shared.Messages;
 
-public static class PtBrFields
+public static class Fields
 {
     public static string FirstName { get; } = "Nome";
     public static string LastName { get; } = "Sobrenome";

@@ -1,6 +1,6 @@
 ﻿using Horizon.Domain.Commands.Inputs.Roles;
 using Horizon.Domain.Entities;
-using Horizon.Domain.Lang.PtBr;
+using Horizon.Shared.Messages;
 using Horizon.Domain.Repositories;
 using Horizon.Shared.Contracts;
 using Horizon.Shared.Outputs;
@@ -26,14 +26,14 @@ public class CreateRoleHandler : IRequestHandler<CreateRoleCommand, IResult>
 
             await _roleRepository.CreateAsync(role);
 
-            return new CommandResult(true, string.Format(PtBrMessages.UpdatedSuccess, PtBrFields.Role), (int)HttpStatusCode.Created);
+            return new CommandResult(true, string.Format(Messages.UpdatedSuccess, Fields.Role), (int)HttpStatusCode.Created);
         }
         catch (Exception ex)
         {
             return new CommandResult
             {
                 Success = false,
-                Message = PtBrMessages.Error,
+                Message = Messages.Error,
                 StatusCode = (int)HttpStatusCode.InternalServerError,
                 Errors = ex.Message
             };

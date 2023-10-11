@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using Horizon.Domain.Lang.PtBr;
+using Horizon.Shared.Messages;
 using Horizon.Domain.ValueObjects;
 using System.Text.RegularExpressions;
 
@@ -11,7 +11,7 @@ public class PhoneValidator : AbstractValidator<Phone>
     {
         RuleFor(phone => phone.Number)
             .Matches(new Regex("^[0-9]"))
-            .WithMessage(string.Format(PtBrMessages.InvalidField, PtBrFields.PhoneNumber))
+            .WithMessage(string.Format(Messages.InvalidField, Fields.PhoneNumber))
             .OverridePropertyName("PhoneNumber");
     }
 }

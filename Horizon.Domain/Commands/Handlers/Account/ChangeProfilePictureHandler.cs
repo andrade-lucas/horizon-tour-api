@@ -1,5 +1,5 @@
 ﻿using Horizon.Domain.Commands.Inputs.Account;
-using Horizon.Domain.Lang.PtBr;
+using Horizon.Shared.Messages;
 using Horizon.Domain.Repositories;
 using Horizon.Domain.Services;
 using Horizon.Shared.Contracts;
@@ -44,7 +44,7 @@ public class ChangeProfilePictureHandler : IRequestHandler<ChangeProfilePictureC
                 await _storageService.DeleteAsync(container, pathSplited[pathSplited.Length - 1]);
             }
 
-            return new CommandResult(true, string.Format(PtBrMessages.UpdatedSuccess, PtBrFields.ProfileImage), (int)HttpStatusCode.OK, new
+            return new CommandResult(true, string.Format(Messages.UpdatedSuccess, Fields.ProfileImage), (int)HttpStatusCode.OK, new
             {
                 profileImageUrl = imageUri
             });
@@ -54,7 +54,7 @@ public class ChangeProfilePictureHandler : IRequestHandler<ChangeProfilePictureC
             return new CommandResult
             {
                 Success = false,
-                Message = PtBrMessages.Error,
+                Message = Messages.Error,
                 StatusCode = (int)HttpStatusCode.InternalServerError
             };
         }

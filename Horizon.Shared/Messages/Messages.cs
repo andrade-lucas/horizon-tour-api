@@ -1,6 +1,6 @@
-﻿namespace Horizon.Domain.Lang.PtBr;
+﻿namespace Horizon.Shared.Messages;
 
-public abstract class PtBrMessages
+public abstract class Messages
 {
     // Validation messages.
     public static string Required { get; } = "O campo {0} é obrigatório";

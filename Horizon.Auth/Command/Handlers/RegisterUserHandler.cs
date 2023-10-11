@@ -3,7 +3,7 @@ using Horizon.Auth.Command.Inputs;
 using Horizon.Auth.Repositories;
 using Horizon.Auth.Services.Contracts;
 using Horizon.Domain.Entities;
-using Horizon.Domain.Lang.PtBr;
+using Horizon.Shared.Messages;
 using Horizon.Domain.Repositories;
 using Horizon.Domain.Security;
 using Horizon.Domain.ValueObjects;
@@ -51,11 +51,11 @@ public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, IResult>
         var userValidator = await _validator.ValidateAsync(user);
 
         if (!userValidator.IsValid)
-            return new CommandResult(false, PtBrMessages.BadRequest, (int)HttpStatusCode.BadRequest, errors: userValidator.ToDictionary());
+            return new CommandResult(false, Messages.BadRequest, (int)HttpStatusCode.BadRequest, errors: userValidator.ToDictionary());
 
         var emailExists = await _authRepository.EmailExistsAsync(email);
         if (emailExists)
-            return new CommandResult(false, PtBrMessages.EmailExists, (int)HttpStatusCode.BadRequest);
+            return new CommandResult(false, Messages.EmailExists, (int)HttpStatusCode.BadRequest);
 
         var defaultRoles = await _roleRepository.GetDefaultAsync();
 
@@ -76,7 +76,7 @@ public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, IResult>
         }
         catch (Exception e)
         {
-            return new CommandResult(false, PtBrMessages.Error, (int)HttpStatusCode.InternalServerError, errors: e.Message);
+            return new CommandResult(false, Messages.Error, (int)HttpStatusCode.InternalServerError, errors: e.Message);
         }
     }
 }
