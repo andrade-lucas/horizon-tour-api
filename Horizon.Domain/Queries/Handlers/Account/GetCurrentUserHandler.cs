@@ -8,7 +8,7 @@ using System.Net;
 
 namespace Horizon.Domain.Queries.Handlers.Account;
 
-public class GetCurrentUserHandler : IRequestHandler<GetCurrentUserCommand, IResult>
+public class GetCurrentUserHandler : IRequestHandler<GetCurrentUserQuery, IResult>
 {
     private readonly IUserRepository _userRepository;
 
@@ -17,11 +17,11 @@ public class GetCurrentUserHandler : IRequestHandler<GetCurrentUserCommand, IRes
         _userRepository = userRepository;
     }
 
-    public async Task<IResult> Handle(GetCurrentUserCommand command, CancellationToken cancellationToken)
+    public async Task<IResult> Handle(GetCurrentUserQuery query, CancellationToken cancellationToken)
     {
         try
         {
-            var user = await _userRepository.GetByIdAsync(command.UserId);
+            var user = await _userRepository.GetByIdAsync(query.UserId);
 
             if (user == null) return new CommandResult(false, Messages.Error, (int)HttpStatusCode.BadRequest);
 
