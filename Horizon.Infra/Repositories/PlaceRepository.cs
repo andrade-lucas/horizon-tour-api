@@ -1,9 +1,11 @@
 ﻿using Dapper;
 using Horizon.Domain.Entities;
-using Horizon.Domain.Enums;
+using Horizon.Domain.Queries.Inputs;
+using Horizon.Domain.Queries.Responses.Places;
 using Horizon.Domain.Repositories;
 using Horizon.Infra.Context;
-using Microsoft.AspNetCore.Http.HttpResults;
+using Horizon.Shared.Helpers;
+using Horizon.Shared.Outputs;
 
 namespace Horizon.Infra.Repositories;
 
@@ -14,6 +16,36 @@ public class PlaceRepository : IPlaceRepository
     public PlaceRepository(IDB db)
     {
         _db = db;
+    }
+
+    public async Task<PaginationResult<GetPlacesResponse>> GetByOwner(string OwnerId, QueryPaginate queryPaginate)
+    {
+        var offset = PaginationHelper.GetOffset(queryPaginate.Page, queryPaginate.PageSize);
+        var filterSql = queryPaginate.Filter != null
+            ? "AND Name LIKE @filter"
+            : "";
+        var sql = $@"
+            SELECT COUNT(*) AS TOTAL_ROWS FROM places WHERE OwnerId = @ownerId AND DeletedAt IS NULL {filterSql}; 
+
+            SELECT Id, Name, Status, IsOpen, PresentationImageUrl 
+            FROM places
+            WHERE OwnerId = @ownerId
+            AND DeletedAt IS NULL
+            {filterSql}
+            LIMIT @offset, @perPage;
+        ";
+
+        var multi = await _db.Connection().QueryMultipleAsync(sql, new
+        {
+            offset,
+            perPage = queryPaginate.PageSize,
+            filter = $"%${queryPaginate.Filter}%",
+            ownerId = OwnerId,
+        });
+        var totalRows = multi.Read<int>().Single();
+        var rows = multi.Read<GetPlacesResponse>().ToList();
+
+        return new PaginationResult<GetPlacesResponse>(totalRows, rows.Count, rows);
     }
 
     public async Task CreateAsync(Place place)
