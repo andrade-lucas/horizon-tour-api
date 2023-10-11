@@ -1,4 +1,4 @@
-﻿using Horizon.Domain.Lang.PtBr;
+﻿using Horizon.Shared.Messages;
 using Horizon.Domain.Queries.Inputs.Users;
 using Horizon.Domain.Repositories;
 using Horizon.Shared.Contracts;
@@ -29,7 +29,7 @@ public class GetAllUsersHandler : IRequestHandler<GetAllUsersQuery, IResult>
         {
             Console.WriteLine(ex);
 
-            return new CommandResult(false, PtBrMessages.Error, (int)HttpStatusCode.InternalServerError);
+            return new CommandResult(false, Messages.Error, (int)HttpStatusCode.InternalServerError);
         }
     }
 }

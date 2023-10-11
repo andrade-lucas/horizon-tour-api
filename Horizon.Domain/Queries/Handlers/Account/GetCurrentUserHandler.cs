@@ -1,4 +1,4 @@
-﻿using Horizon.Domain.Lang.PtBr;
+﻿using Horizon.Shared.Messages;
 using Horizon.Domain.Queries.Inputs.Account;
 using Horizon.Domain.Repositories;
 using Horizon.Shared.Contracts;
@@ -23,7 +23,7 @@ public class GetCurrentUserHandler : IRequestHandler<GetCurrentUserCommand, IRes
         {
             var user = await _userRepository.GetByIdAsync(command.UserId);
 
-            if (user == null) return new CommandResult(false, PtBrMessages.Error, (int)HttpStatusCode.BadRequest);
+            if (user == null) return new CommandResult(false, Messages.Error, (int)HttpStatusCode.BadRequest);
 
             return new CommandResult(true, string.Empty, (int)HttpStatusCode.OK, data: user);
         }
@@ -32,7 +32,7 @@ public class GetCurrentUserHandler : IRequestHandler<GetCurrentUserCommand, IRes
             return new CommandResult
             {
                 Success = false,
-                Message = PtBrMessages.Error,
+                Message = Messages.Error,
                 StatusCode = (int)HttpStatusCode.InternalServerError,
                 Errors = ex.Message
             };

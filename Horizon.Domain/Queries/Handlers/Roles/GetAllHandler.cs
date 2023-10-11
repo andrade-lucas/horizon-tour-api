@@ -1,4 +1,4 @@
-﻿using Horizon.Domain.Lang.PtBr;
+﻿using Horizon.Shared.Messages;
 using Horizon.Domain.Queries.Inputs.Roles;
 using Horizon.Domain.Repositories;
 using Horizon.Shared.Contracts;
@@ -30,7 +30,7 @@ public class GetAllHandler : IRequestHandler<GetRolesQuery, IResult>
             return new CommandResult
             {
                 Success = false,
-                Message = PtBrMessages.Error,
+                Message = Messages.Error,
                 StatusCode = (int)HttpStatusCode.InternalServerError,
                 Errors = ex.Message
             };
