@@ -1,10 +1,10 @@
-﻿using Horizon.Shared.Queries;
+﻿using Horizon.Shared.Contracts;
+using MediatR;
 
 namespace Horizon.Domain.Queries.Inputs.Users;
 
-public class GetAllUsersQuery : IQuery
-{
-    public string? Filter { get; set; }
-    public int page { get; set; } = 1;
-    public int PageSize { get; set; } = 20;
-}
+public record GetAllUsersQuery(
+    string? Filter = null,
+    int Page = 0,
+    int PageSize = 20
+) : IRequest<IResult>;

@@ -1,13 +1,14 @@
 ﻿using Horizon.Domain.Commands.Inputs.Users;
 using Horizon.Domain.Lang.PtBr;
 using Horizon.Domain.Repositories;
-using Horizon.Shared.Commands;
+using Horizon.Shared.Contracts;
 using Horizon.Shared.Outputs;
+using MediatR;
 using System.Net;
 
 namespace Horizon.Domain.Commands.Handlers.Users;
 
-public class DeleteUserHandler : ICommandHandler<DeleteUserCommand>
+public class DeleteUserHandler : IRequestHandler<DeleteUserCommand, IResult>
 {
     private readonly IUserRepository _userRepository;
 
@@ -16,7 +17,7 @@ public class DeleteUserHandler : ICommandHandler<DeleteUserCommand>
         _userRepository = userRepository;
     }
 
-    public async Task<ICommandResult> Handle(DeleteUserCommand command)
+    public async Task<IResult> Handle(DeleteUserCommand command, CancellationToken cancellationToken)
     {
         try
         {

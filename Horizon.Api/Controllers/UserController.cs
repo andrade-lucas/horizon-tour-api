@@ -1,7 +1,7 @@
-﻿using Horizon.Domain.Commands.Inputs.Users;
+﻿using Horizon.Api.Controllers.Requests;
+using Horizon.Domain.Commands.Inputs.Users;
 using Horizon.Domain.Queries.Inputs.Users;
-using Horizon.Shared.Commands;
-using Horizon.Shared.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,19 +11,18 @@ namespace Horizon.Api.Controllers;
 [Authorize(Roles = "admin")]
 public class UserController : ControllerBase
 {
-    private readonly ICommandHandler<DeleteUserCommand> _deleteUserHandler;
-    private readonly IQueryHandler<GetAllUsersQuery> _getAllUsersQuery;
+    private readonly IMediator _mediator;
 
-    public UserController(ICommandHandler<DeleteUserCommand> deleteUserHandler, IQueryHandler<GetAllUsersQuery> getAllUsersQuery)
+    public UserController(IMediator mediator)
     {
-        _deleteUserHandler = deleteUserHandler;
-        _getAllUsersQuery = getAllUsersQuery;
+        _mediator = mediator;
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll([FromQuery] GetAllUsersQuery query)
+    public async Task<IActionResult> GetAll([FromQuery] PaginateRequest request)
     {
-        var result = await _getAllUsersQuery.Handle(query);
+        var query = new GetAllUsersQuery(request.Filter, request.Page, request.PageSize);
+        var result = await _mediator.Send(query);
 
         return StatusCode(result.StatusCode, result);
     }
@@ -31,8 +30,8 @@ public class UserController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(string id)
     {
-        var command = new DeleteUserCommand { UserId = id };
-        var result = await _deleteUserHandler.Handle(command);
+        var command = new DeleteUserCommand(id);
+        var result = await _mediator.Send(command);
 
         return StatusCode(result.StatusCode, result);
     }

@@ -2,7 +2,7 @@
 using Horizon.Domain.Validators.Entities;
 using Horizon.Domain.Validators.ValueObjects;
 
-namespace Horizon.Api.Configuration.Extensions
+namespace Horizon.Api.Extensions
 {
     public static class ValidationsExtension
     {

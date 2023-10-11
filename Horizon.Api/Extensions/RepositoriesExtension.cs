@@ -2,7 +2,7 @@
 using Horizon.Domain.Repositories;
 using Horizon.Infra.Repositories;
 
-namespace Horizon.Api.Configuration.Extensions;
+namespace Horizon.Api.Extensions;
 
 public static class RepositoriesExtension
 {

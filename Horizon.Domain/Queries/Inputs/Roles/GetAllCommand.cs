@@ -1,7 +1,6 @@
-﻿using Horizon.Shared.Commands;
+﻿using Horizon.Shared.Contracts;
+using MediatR;
 
 namespace Horizon.Domain.Queries.Inputs.Roles;
 
-public class GetAllCommand : ICommand
-{
-}
+public record GetRolesQuery() : IRequest<IResult>;

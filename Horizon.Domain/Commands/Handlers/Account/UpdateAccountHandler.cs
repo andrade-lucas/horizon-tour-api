@@ -4,13 +4,14 @@ using Horizon.Domain.Entities;
 using Horizon.Domain.Lang.PtBr;
 using Horizon.Domain.Repositories;
 using Horizon.Domain.ValueObjects;
-using Horizon.Shared.Commands;
+using Horizon.Shared.Contracts;
 using Horizon.Shared.Outputs;
+using MediatR;
 using System.Net;
 
 namespace Horizon.Domain.Commands.Handlers.Account;
 
-public class UpdateAccountHandler : ICommandHandler<UpdateAccountCommand>
+public class UpdateAccountHandler : IRequestHandler<UpdateAccountCommand, IResult>
 {
     private readonly IUserRepository _userRepository;
     private readonly IValidator<User> _userValidator;
@@ -21,7 +22,7 @@ public class UpdateAccountHandler : ICommandHandler<UpdateAccountCommand>
         _userValidator = userValidator;
     }
 
-    public async Task<ICommandResult> Handle(UpdateAccountCommand command)
+    public async Task<IResult> Handle(UpdateAccountCommand command, CancellationToken cancellationToken)
     {
         try
         {

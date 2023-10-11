@@ -1,12 +1,9 @@
 ﻿using Horizon.Domain.Commands.Inputs.Roles;
-using Horizon.Domain.Commands.Handlers.Roles;
-using Horizon.Domain.Repositories;
-using Horizon.Shared.Commands;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 using Horizon.Domain.Queries.Inputs.Roles;
-using Horizon.Domain.Queries.Handlers.Roles;
+using MediatR;
+using Horizon.Api.Controllers.Requests.Roles;
 
 namespace Horizon.Api.Controllers;
 
@@ -14,32 +11,27 @@ namespace Horizon.Api.Controllers;
 [Authorize(Roles = "admin")]
 public class RolesController : ControllerBase
 {
-    private readonly ICommandHandler<CreateRoleCommand> _createRoleHandler;
-    private readonly ICommandHandler<GetAllCommand> _getAllHandler;
+    private readonly IMediator _mediator;
 
-    public RolesController(IRoleRepository roleRepository)
+    public RolesController(IMediator mediator)
     {
-        _createRoleHandler = new CreateRoleHandler(roleRepository);
-        _getAllHandler = new GetAllHandler(roleRepository);
+        _mediator = mediator;
     }
 
-    [HttpGet("get-all")]
-    public async Task<IActionResult> GetAllAsync([FromQuery] GetAllCommand command)
+    [HttpGet]
+    public async Task<IActionResult> Index()
     {
-        var result = await _getAllHandler.Handle(command);
+        var query = new GetRolesQuery();
+        var result = await _mediator.Send(query);
 
         return StatusCode(result.StatusCode, result);
     }
 
-    [HttpPost("create")]
-    public async Task<IActionResult> CreateAsync([FromBody] CreateRoleCommand command)
+    [HttpPost]
+    public async Task<IActionResult> CreateAsync([FromBody] CreateRoleRequest request)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-
-        var result = await _createRoleHandler.Handle(command);
+        var command = new CreateRoleCommand(request.Name, request.Slug);
+        var result = await _mediator.Send(command);
 
         return StatusCode(result.StatusCode, result);
     }

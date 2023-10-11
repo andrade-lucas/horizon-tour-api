@@ -1,8 +1,8 @@
-﻿using Horizon.Shared.Commands;
+﻿using Horizon.Shared.Contracts;
 
 namespace Horizon.Shared.Outputs;
 
-public class CommandResult : ICommandResult
+public class CommandResult : IResult
 {
     public bool Success { get; set; }
     public string Message { get; set; }

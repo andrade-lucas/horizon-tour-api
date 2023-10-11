@@ -2,13 +2,14 @@
 using Horizon.Domain.Lang.PtBr;
 using Horizon.Domain.Repositories;
 using Horizon.Domain.Services;
-using Horizon.Shared.Commands;
+using Horizon.Shared.Contracts;
 using Horizon.Shared.Outputs;
+using MediatR;
 using System.Net;
 
 namespace Horizon.Domain.Commands.Handlers.Account;
 
-public class ChangeProfilePictureHandler : ICommandHandler<ChangeProfilePictureCommand>
+public class ChangeProfilePictureHandler : IRequestHandler<ChangeProfilePictureCommand, IResult>
 {
     private readonly IUserRepository _userRepository;
     private readonly IUploadImageService _uploadImageService;
@@ -21,7 +22,7 @@ public class ChangeProfilePictureHandler : ICommandHandler<ChangeProfilePictureC
         _storageService = storageService;
     }
 
-    public async Task<ICommandResult> Handle(ChangeProfilePictureCommand command)
+    public async Task<IResult> Handle(ChangeProfilePictureCommand command, CancellationToken cancellationToken)
     {
         try
         {
