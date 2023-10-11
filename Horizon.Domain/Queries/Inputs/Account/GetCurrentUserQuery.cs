@@ -3,6 +3,6 @@ using MediatR;
 
 namespace Horizon.Domain.Queries.Inputs.Account;
 
-public record GetCurrentUserCommand(
+public record GetCurrentUserQuery(
     string UserId
 ) : IRequest<IResult>;
