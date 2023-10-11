@@ -7,7 +7,7 @@ using Horizon.Domain.Lang.PtBr;
 using Horizon.Domain.Repositories;
 using Horizon.Domain.Security;
 using Horizon.Domain.ValueObjects;
-using Horizon.Shared.Commands;
+using Horizon.Shared.Contracts;
 using Horizon.Shared.Outputs;
 using MediatR;
 using Microsoft.Extensions.Configuration;
@@ -15,7 +15,7 @@ using System.Net;
 
 namespace Horizon.Auth.Command.Handlers;
 
-public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, ICommandResult>
+public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, IResult>
 {
     private readonly IAuthRepository _authRepository;
     private readonly IRoleRepository _roleRepository;
@@ -38,7 +38,7 @@ public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, ICommand
         _validator = validator;
     }
 
-    public async Task<ICommandResult> Handle(RegisterUserCommand command, CancellationToken cancellationToken)
+    public async Task<IResult> Handle(RegisterUserCommand command, CancellationToken cancellationToken)
     {
         var passHash = PasswordHasherSecurity.Hash(command.Password);
 

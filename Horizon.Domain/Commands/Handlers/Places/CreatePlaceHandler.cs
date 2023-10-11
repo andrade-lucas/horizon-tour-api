@@ -4,13 +4,14 @@ using Horizon.Domain.Entities;
 using Horizon.Domain.Repositories;
 using Horizon.Domain.Services;
 using Horizon.Domain.ValueObjects;
-using Horizon.Shared.Commands;
+using Horizon.Shared.Contracts;
 using Horizon.Shared.Outputs;
+using MediatR;
 using System.Net;
 
 namespace Horizon.Domain.Commands.Handlers.Places;
 
-public class CreatePlaceHandler : ICommandHandler<CreatePlaceCommand>
+public class CreatePlaceHandler : IRequestHandler<CreatePlaceCommand, IResult>
 {
     private readonly IPlaceRepository _placeRepository;
     private readonly ICityRepository _cityRepository;
@@ -33,7 +34,7 @@ public class CreatePlaceHandler : ICommandHandler<CreatePlaceCommand>
         _placeValidator = placeValidator;
     }
 
-    public async Task<ICommandResult> Handle(CreatePlaceCommand command)
+    public async Task<IResult> Handle(CreatePlaceCommand command, CancellationToken cancellationToken)
     {
         try
         {

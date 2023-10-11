@@ -1,13 +1,14 @@
 ﻿using Horizon.Domain.Lang.PtBr;
 using Horizon.Domain.Queries.Inputs.Roles;
 using Horizon.Domain.Repositories;
-using Horizon.Shared.Commands;
+using Horizon.Shared.Contracts;
 using Horizon.Shared.Outputs;
+using MediatR;
 using System.Net;
 
 namespace Horizon.Domain.Queries.Handlers.Roles;
 
-public class GetAllHandler : ICommandHandler<GetAllCommand>
+public class GetAllHandler : IRequestHandler<GetRolesQuery, IResult>
 {
     private readonly IRoleRepository _repository;
 
@@ -16,7 +17,7 @@ public class GetAllHandler : ICommandHandler<GetAllCommand>
         _repository = repository;
     }
 
-    public async Task<ICommandResult> Handle(GetAllCommand command)
+    public async Task<IResult> Handle(GetRolesQuery query, CancellationToken cancellationToken)
     {
         try
         {

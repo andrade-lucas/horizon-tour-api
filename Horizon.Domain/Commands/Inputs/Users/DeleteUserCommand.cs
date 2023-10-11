@@ -1,8 +1,6 @@
-﻿using Horizon.Shared.Commands;
+﻿using Horizon.Shared.Contracts;
+using MediatR;
 
 namespace Horizon.Domain.Commands.Inputs.Users;
 
-public class DeleteUserCommand : ICommand
-{
-    public string UserId { get; set; }
-}
+public record DeleteUserCommand(string UserId) : IRequest<IResult>;

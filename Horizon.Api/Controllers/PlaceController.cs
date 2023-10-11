@@ -1,6 +1,6 @@
 ﻿using Horizon.Api.Controllers.Requests.Places;
 using Horizon.Domain.Commands.Inputs.Places;
-using Horizon.Shared.Commands;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,11 +10,11 @@ namespace Horizon.Api.Controllers;
 [Authorize(Roles = "admin, manager")]
 public class PlaceController : ControllerBase
 {
-    private readonly ICommandHandler<CreatePlaceCommand> _createPlaceCommand;
+    private readonly IMediator _mediator;
 
-    public PlaceController(ICommandHandler<CreatePlaceCommand> createPlaceCommand)
+    public PlaceController(IMediator mediator)
     {
-        _createPlaceCommand = createPlaceCommand;
+        _mediator = mediator;
     }
 
     [HttpGet]
@@ -27,23 +27,24 @@ public class PlaceController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreatePlaceRequest request)
     {
-        var command = new CreatePlaceCommand();
-        command.Name = request.Name;
-        command.OwnerId = User.FindFirst("id")?.Value;
-        command.CityId = request.CityId;
-        command.Street = request.Street;
-        command.Number = request.Number;
-        command.Neighborhood = request.Neighborhood;
-        command.ZipCode = request.ZipCode;
-        command.Latitude = request.Latitude;
-        command.Longitude = request.Longitude;
-        command.PresentationImageBase64 = request.PresentationImageBase64;
-        command.AutomaticOpen = request.AutomaticOpen;
-        command.Status = request.Status;
-        command.Description = request.Description;
-        command.Type = request.Type;
+        var command = new CreatePlaceCommand(
+            request.Name,
+            User.FindFirst("id")?.Value,
+            request.status,
+            request.CityId,
+            request.Street,
+            request.Number,
+            request.ZipCode,
+            request.Neighborhood,
+            request.Latitude,
+            request.Longitude,
+            request.AutomaticOpen,
+            request.Type,
+            request.Description,
+            request.PresentationImageBase64
+        );
 
-        var result = await _createPlaceCommand.Handle(command);
+        var result = await _mediator.Send(command);
 
         return StatusCode(result.StatusCode, result);
     }

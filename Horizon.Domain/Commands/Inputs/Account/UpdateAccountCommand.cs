@@ -1,13 +1,13 @@
-﻿using Horizon.Shared.Commands;
+﻿using Horizon.Shared.Contracts;
+using MediatR;
 
 namespace Horizon.Domain.Commands.Inputs.Account;
 
-public class UpdateAccountCommand : ICommand
-{
-    public string Id { get; set; }
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public string NickName { get; set; }
-    public string Phone { get; set; }
-    public DateTime Birthdate { get; set; }
-}
+public record UpdateAccountCommand(
+    string Id,
+    string FirstName,
+    string LastName,
+    string NickName,
+    string Phone,
+    DateTime Birthdate
+) : IRequest<IResult>;

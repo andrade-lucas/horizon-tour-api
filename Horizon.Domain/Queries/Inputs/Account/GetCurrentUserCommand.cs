@@ -1,8 +1,8 @@
-﻿using Horizon.Shared.Commands;
+﻿using Horizon.Shared.Contracts;
+using MediatR;
 
 namespace Horizon.Domain.Queries.Inputs.Account;
 
-public class GetCurrentUserCommand : ICommand
-{
-    public string UserId { get; set; }
-}
+public record GetCurrentUserCommand(
+    string UserId
+) : IRequest<IResult>;

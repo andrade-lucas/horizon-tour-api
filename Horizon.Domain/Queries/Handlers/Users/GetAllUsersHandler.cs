@@ -1,36 +1,35 @@
 ﻿using Horizon.Domain.Lang.PtBr;
 using Horizon.Domain.Queries.Inputs.Users;
 using Horizon.Domain.Repositories;
-using Horizon.Shared.Commands;
+using Horizon.Shared.Contracts;
 using Horizon.Shared.Outputs;
-using Horizon.Shared.Queries;
+using MediatR;
 using System.Net;
 
-namespace Horizon.Domain.Queries.Handlers.Users
+namespace Horizon.Domain.Queries.Handlers.Users;
+
+public class GetAllUsersHandler : IRequestHandler<GetAllUsersQuery, IResult>
 {
-    public class GetAllUsersHandler : IQueryHandler<GetAllUsersQuery>
+    private readonly IUserRepository _userRepository;
+
+    public GetAllUsersHandler(IUserRepository userRepository)
     {
-        private readonly IUserRepository _userRepository;
+        _userRepository = userRepository;
+    }
 
-        public GetAllUsersHandler(IUserRepository userRepository)
+    public async Task<IResult> Handle(GetAllUsersQuery query, CancellationToken cancellationToken)
+    {
+        try
         {
-            _userRepository = userRepository;
+            var users = await _userRepository.GetAllAsync(query.Filter, query.Page, query.PageSize);
+
+            return new CommandResult(true, string.Empty, (int)HttpStatusCode.OK, users);
         }
-
-        public async Task<ICommandResult> Handle(GetAllUsersQuery query)
+        catch (Exception ex)
         {
-            try
-            {
-                var users = await _userRepository.GetAllAsync(query.Filter, query.page, query.PageSize);
+            Console.WriteLine(ex);
 
-                return new CommandResult(true, string.Empty, (int)HttpStatusCode.OK, users);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-
-                return new CommandResult(false, PtBrMessages.Error, (int)HttpStatusCode.InternalServerError);
-            }
+            return new CommandResult(false, PtBrMessages.Error, (int)HttpStatusCode.InternalServerError);
         }
     }
 }

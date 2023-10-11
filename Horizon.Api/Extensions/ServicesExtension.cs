@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace Horizon.Api.Configuration.Extensions;
+namespace Horizon.Api.Extensions;
 
 public static class ServicesExtension
 {

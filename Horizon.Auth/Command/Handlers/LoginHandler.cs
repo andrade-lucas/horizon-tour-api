@@ -5,16 +5,16 @@ using Horizon.Auth.Queries.Responses;
 using Horizon.Domain.Repositories;
 using Horizon.Domain.Security;
 using Horizon.Domain.ValueObjects;
-using Horizon.Shared.Commands;
 using Horizon.Shared.Outputs;
 using System.Net;
 using FluentValidation;
 using Horizon.Domain.Lang.PtBr;
 using MediatR;
+using Horizon.Shared.Contracts;
 
 namespace Horizon.Auth.Command.Handlers;
 
-public class LoginHandler : IRequestHandler<LoginCommand, ICommandResult>
+public class LoginHandler : IRequestHandler<LoginCommand, IResult>
 {
     private readonly IAuthRepository _authRepository;
     private readonly ITokenService _tokenService;
@@ -37,7 +37,7 @@ public class LoginHandler : IRequestHandler<LoginCommand, ICommandResult>
         _passwordValidator = passwordValidator;
     }
 
-    public async Task<ICommandResult> Handle(LoginCommand command, CancellationToken cancellationToken)
+    public async Task<IResult> Handle(LoginCommand command, CancellationToken cancellationToken)
     {
         try
         {

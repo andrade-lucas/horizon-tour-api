@@ -1,4 +1,4 @@
-﻿using Horizon.Shared.Commands;
+﻿using Horizon.Shared.Contracts;
 using MediatR;
 
 namespace Horizon.Auth.Command.Inputs;
@@ -9,4 +9,4 @@ public record RegisterUserCommand(
     string NickName,
     string Email,
     string Password
-) : IRequest<ICommandResult>;
+) : IRequest<IResult>;
