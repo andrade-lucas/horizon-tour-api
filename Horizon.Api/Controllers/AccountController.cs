@@ -21,7 +21,7 @@ public class AccountController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetCurrentAsync()
     {
-        var command = new GetCurrentUserCommand(User.FindFirst("id")?.Value);
+        var command = new GetCurrentUserQuery(User.FindFirst("id")?.Value);
 
         var result = await _mediator.Send(command);
 

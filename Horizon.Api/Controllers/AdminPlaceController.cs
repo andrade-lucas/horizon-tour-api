@@ -1,27 +1,37 @@
-﻿using Horizon.Api.Controllers.Requests.Places;
+﻿using Horizon.Api.Controllers.Requests;
+using Horizon.Api.Controllers.Requests.Places;
 using Horizon.Domain.Commands.Inputs.Places;
+using Horizon.Domain.Queries.Inputs.Places;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Horizon.Api.Controllers;
 
-[Route("v1/places")]
+[Route("v1/admin-places")]
 [Authorize(Roles = "admin, manager")]
-public class PlaceController : ControllerBase
+public class AdminPlaceController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public PlaceController(IMediator mediator)
+    public AdminPlaceController(IMediator mediator)
     {
         _mediator = mediator;
     }
 
     [HttpGet]
-    [AllowAnonymous]
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index([FromQuery] PaginateRequest request)
     {
-        return StatusCode(200, "PlaceController.Index");
+        var query = new GetPlacesQuery(
+            User.FindFirst("id")?.Value,
+            request.Filter,
+            request.Page,
+            request.PageSize
+        );
+
+        var result = await _mediator.Send(query);
+
+        return StatusCode(result.StatusCode, result);
     }
 
     [HttpPost]

@@ -1,9 +1,13 @@
 ﻿using Horizon.Domain.Entities;
+using Horizon.Domain.Queries.Inputs;
+using Horizon.Domain.Queries.Responses.Places;
+using Horizon.Shared.Outputs;
 
-namespace Horizon.Domain.Repositories
+namespace Horizon.Domain.Repositories;
+
+public interface IPlaceRepository
 {
-    public interface IPlaceRepository
-    {
-        Task CreateAsync(Place place);
-    }
+    Task<PaginationResult<GetPlacesResponse>> GetByOwner(string OwnerId, QueryPaginate queryPaginate);
+
+    Task CreateAsync(Place place);
 }
