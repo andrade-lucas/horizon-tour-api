@@ -7,7 +7,6 @@ namespace Horizon.Domain.Commands.Inputs.Places;
 public record CreatePlaceCommand(
     string Name,
     string OwnerId,
-    EPlaceStatus Status,
     string CityId,
     string Street,
     string Number,

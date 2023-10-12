@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Horizon.Domain.Commands.Inputs.Places;
 using Horizon.Domain.Entities;
+using Horizon.Domain.Enums;
 using Horizon.Domain.Repositories;
 using Horizon.Domain.Services;
 using Horizon.Domain.ValueObjects;
@@ -79,7 +80,7 @@ public class CreatePlaceHandler : IRequestHandler<CreatePlaceCommand, IResult>
             new Email(currentUser.Email)
         );
 
-        var place = new Place(command.Name, command.Status);
+        var place = new Place(command.Name, EPlaceStatus.None);
         place.AddAddress(address);
         place.AddOwner(owner);
         place.AddAutomaticOpen(command.AutomaticOpen);
