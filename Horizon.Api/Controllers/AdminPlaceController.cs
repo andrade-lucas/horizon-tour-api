@@ -34,6 +34,15 @@ public class AdminPlaceController : ControllerBase
         return StatusCode(result.StatusCode, result);
     }
 
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(string id)
+    {
+        var query = new GetPlaceByIdQuery(id);
+        var result = await _mediator.Send(query);
+
+        return StatusCode(result.StatusCode, result);
+    }
+
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreatePlaceRequest request)
     {
