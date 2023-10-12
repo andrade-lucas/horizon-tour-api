@@ -7,5 +7,6 @@ public record GetPlacesResponse(
     string Name,
     EPlaceStatus Status,
     bool IsOpen,
-    string PresentationImageUrl
+    string PresentationImageUrl,
+    string Owner
 );
