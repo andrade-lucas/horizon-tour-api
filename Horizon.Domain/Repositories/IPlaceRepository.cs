@@ -7,7 +7,7 @@ namespace Horizon.Domain.Repositories;
 
 public interface IPlaceRepository
 {
-    Task<PaginationResult<GetPlacesResponse>> GetByOwner(string OwnerId, QueryPaginate queryPaginate);
+    Task<PaginationResult<GetPlacesResponse>> GetByUser(string userId, QueryPaginate queryPaginate);
 
     Task CreateAsync(Place place);
 }

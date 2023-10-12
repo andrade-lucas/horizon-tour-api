@@ -18,29 +18,33 @@ public class PlaceRepository : IPlaceRepository
         _db = db;
     }
 
-    public async Task<PaginationResult<GetPlacesResponse>> GetByOwner(string OwnerId, QueryPaginate queryPaginate)
+    public async Task<PaginationResult<GetPlacesResponse>> GetByUser(string userId, QueryPaginate queryPaginate)
     {
         var offset = PaginationHelper.GetOffset(queryPaginate.Page, queryPaginate.PageSize);
         var filterSql = queryPaginate.Filter != null
-            ? "AND Name LIKE @filter"
+            ? "AND p.Name LIKE @filter"
             : "";
         var sql = $@"
-            SELECT COUNT(*) AS TOTAL_ROWS FROM places WHERE OwnerId = @ownerId AND DeletedAt IS NULL {filterSql}; 
+            SELECT COUNT(*) AS TOTAL_ROWS FROM places p
+            INNER JOIN users_places up ON up.PlaceId = p.Id
+            WHERE up.UserId = @userId AND p.DeletedAt IS NULL {filterSql};
 
-            SELECT Id, Name, Status, IsOpen, PresentationImageUrl 
-            FROM places
-            WHERE OwnerId = @ownerId
-            AND DeletedAt IS NULL
+
+            SELECT p.Id, p.Name, p.Status, p.IsOpen, p.PresentationImageUrl, CONCAT(u.FirstName, ' ', u.LastName) AS OWNER FROM places p
+            INNER JOIN users_places up ON up.PlaceId = p.Id
+            LEFT JOIN users u on u.Id = p.OwnerId
+            WHERE up.UserId = @userId
+            AND p.DeletedAt IS NULL
             {filterSql}
             LIMIT @offset, @perPage;
         ";
 
         var multi = await _db.Connection().QueryMultipleAsync(sql, new
         {
+            userId,
             offset,
             perPage = queryPaginate.PageSize,
-            filter = $"%${queryPaginate.Filter}%",
-            ownerId = OwnerId,
+            filter = $"%${queryPaginate.Filter}%"
         });
         var totalRows = multi.Read<int>().Single();
         var rows = multi.Read<GetPlacesResponse>().ToList();
