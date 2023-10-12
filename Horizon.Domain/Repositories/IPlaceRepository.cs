@@ -7,7 +7,11 @@ namespace Horizon.Domain.Repositories;
 
 public interface IPlaceRepository
 {
-    Task<PaginationResult<GetPlacesResponse>> GetByUser(string userId, QueryPaginate queryPaginate);
+    Task<PaginationResult<GetPlacesResponse>> GetByUserAsync(string userId, QueryPaginate queryPaginate);
+
+    Task<Place> GetByIdAsync(string id);
 
     Task CreateAsync(Place place);
+
+    Task PublishAsync(Place placeId);
 }

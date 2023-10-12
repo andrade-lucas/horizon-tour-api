@@ -57,4 +57,13 @@ public class AdminPlaceController : ControllerBase
 
         return StatusCode(result.StatusCode, result);
     }
+
+    [HttpPatch("publish")]
+    public async Task<IActionResult> Publish([FromBody] PublishPlaceRequest request)
+    {
+        var command = new PublishPlaceCommand(request.PlaceId);
+        var result = await _mediator.Send(command);
+
+        return StatusCode(result.StatusCode, result);
+    }
 }

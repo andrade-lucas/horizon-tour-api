@@ -24,7 +24,7 @@ public class GetPlacesHandler : IRequestHandler<GetPlacesQuery, IResult>
         {
             var queryPaginate = new QueryPaginate(query.Filter, query.Page, query.PageSize);
 
-            var places = await _placeRepository.GetByUser(query.UserId, queryPaginate);
+            var places = await _placeRepository.GetByUserAsync(query.UserId, queryPaginate);
 
             return new CommandResult(true, string.Empty, (int)HttpStatusCode.OK, data: places);
         }
