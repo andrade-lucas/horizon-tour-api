@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwagger();
 builder.Services.AddCors(cors =>
 {
     cors.AddDefaultPolicy(policy => policy
