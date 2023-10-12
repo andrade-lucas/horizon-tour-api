@@ -1,6 +1,7 @@
 ﻿using Horizon.Domain.Enums;
 using Horizon.Domain.ValueObjects;
 using Horizon.Shared.Entities;
+using Horizon.Shared.Messages;
 
 namespace Horizon.Domain.Entities;
 
@@ -23,6 +24,14 @@ public class Place : Entity
         IsOpen = isOpen;
     }
 
+    public Place(string id, string name, EPlaceStatus status, bool isOpen = false, DateTime? createdAt = null, DateTime? updatedAt = null) 
+        : base(id, createdAt, updatedAt)
+    {
+        Name = name;
+        Status = status;
+        IsOpen = isOpen;
+    }
+
     public void AddOwner(User owner) => Owner = owner;
 
     public void AddAddress(Address address) => Address = address;
@@ -34,4 +43,29 @@ public class Place : Entity
     public void AddDescription(string description) => Description = description;
 
     public void AddType(EPlaceType type) => Type = type;
+
+    public bool CanPublish()
+    {
+        bool canPublish = false;
+
+        if (Type != null && Type != EPlaceType.None && Status != EPlaceStatus.Published)
+            canPublish = true;
+
+        return canPublish;
+    }
+
+    public void Publish()
+    {
+        if (Status != EPlaceStatus.Published)
+            Status = EPlaceStatus.Published;
+    }
+
+    public IDictionary<string, string> ErrorsOnPublish()
+    {
+        var errors = new Dictionary<string, string>();
+
+        if (Type == null || Type == EPlaceType.None) errors.Add("Type", string.Format(Messages.InvalidField, "Tipo"));
+
+        return errors;
+    }
 }
