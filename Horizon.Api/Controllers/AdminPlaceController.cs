@@ -40,7 +40,6 @@ public class AdminPlaceController : ControllerBase
         var command = new CreatePlaceCommand(
             request.Name,
             User.FindFirst("id")?.Value,
-            request.status,
             request.CityId,
             request.Street,
             request.Number,

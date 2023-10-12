@@ -4,7 +4,6 @@ namespace Horizon.Api.Controllers.Requests.Places;
 
 public record CreatePlaceRequest(
     string Name,
-    EPlaceStatus status,
     string CityId,
     string Street,
     string Number,
