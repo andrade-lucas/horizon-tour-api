@@ -1,14 +1,9 @@
-﻿using Horizon.Shared.Commands;
-using System.ComponentModel.DataAnnotations;
+﻿using Horizon.Shared.Contracts;
+using MediatR;
 
 namespace Horizon.Auth.Command.Inputs;
 
-public class LoginCommand : ICommand
-{
-    [Required]
-    [EmailAddress]
-    public string Email { get; set; }
-
-    [Required]
-    public string Password { get; set; }
-}
+public record LoginCommand(
+    string Email,
+    string Password
+) : IRequest<IResult>;

@@ -1,9 +1,9 @@
-﻿using Horizon.Shared.Commands;
+﻿using Horizon.Shared.Contracts;
+using MediatR;
 
 namespace Horizon.Domain.Commands.Inputs.Account;
 
-public class ChangeProfilePictureCommand : ICommand
-{
-    public string UserId { get; set; }
-    public string ImageBase64 { get; set; }
-}
+public record ChangeProfilePictureCommand(
+    string UserId,
+    string ImageBase64
+) : IRequest<IResult>;

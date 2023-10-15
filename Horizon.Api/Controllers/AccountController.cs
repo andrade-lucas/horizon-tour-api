@@ -1,10 +1,9 @@
-﻿using Horizon.Domain.Commands.Inputs.Account;
+﻿using Horizon.Api.Controllers.Requests.Account;
+using Horizon.Domain.Commands.Inputs.Account;
 using Horizon.Domain.Queries.Inputs.Account;
-using Horizon.Shared.Commands;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace Horizon.Api.Controllers;
 
@@ -12,43 +11,46 @@ namespace Horizon.Api.Controllers;
 [Route("v1/account")]
 public class AccountController : ControllerBase
 {
-    private readonly ICommandHandler<GetCurrentUserCommand> _currentUserHandler;
-    private readonly ICommandHandler<ChangeProfilePictureCommand> _changeProfileImageHandler;
+    private readonly IMediator _mediator;
 
-    public AccountController(
-        ICommandHandler<GetCurrentUserCommand> currentUserHandler,
-        ICommandHandler<ChangeProfilePictureCommand> changeProfileImageHandler
-    )
+    public AccountController(IMediator mediator)
     {
-        _currentUserHandler = currentUserHandler;
-        _changeProfileImageHandler = changeProfileImageHandler;
+        _mediator = mediator;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetCurrentAsync()
     {
-        var command = new GetCurrentUserCommand
-        {
-            UserId = User.FindFirst("id")?.Value
-        };
+        var command = new GetCurrentUserQuery(User.FindFirst("id")?.Value);
 
-        var result = await _currentUserHandler.Handle(command);
+        var result = await _mediator.Send(command);
 
         return StatusCode(result.StatusCode, result);
     }
 
-    [HttpPost("update")]
-    public async Task<IActionResult> Update()
+    [HttpPut]
+    public async Task<IActionResult> Update([FromBody] UpdateAccountRequest request)
     {
-        throw new NotImplementedException();
+        var command = new UpdateAccountCommand(
+            User.FindFirst("id")?.Value,
+            request.FirstName,
+            request.LastName,
+            request.NickName,
+            request.Phone,
+            request.Birthdate
+        );
+
+        var result = await _mediator.Send(command);
+
+        return StatusCode(result.StatusCode, result);
     }
 
-    [HttpPut("change-profile-picture")]
-    public async Task<IActionResult> ChangeProfilePicture([FromBody] ChangeProfilePictureCommand command)
+    [HttpPatch("change-profile-picture")]
+    public async Task<IActionResult> ChangeProfilePicture([FromBody] ChangeProfilePictureRequest request)
     {
-        command.UserId = User.FindFirst("id")?.Value;
+        var command = new ChangeProfilePictureCommand(User.FindFirst("id")?.Value, request.ImageBase64);
 
-        var result = await _changeProfileImageHandler.Handle(command);
+        var result = await _mediator.Send(command);
 
         return StatusCode(result.StatusCode, result);
     }

@@ -1,9 +1,9 @@
-﻿using Horizon.Shared.Commands;
+﻿using Horizon.Shared.Contracts;
+using MediatR;
 
 namespace Horizon.Domain.Commands.Inputs.Roles;
 
-public class CreateRoleCommand : ICommand
-{
-    public string Name { get; set; }
-    public string Slug { get; set; }
-}
+public record CreateRoleCommand(
+    string Name,
+    string Slug
+) : IRequest<IResult>;

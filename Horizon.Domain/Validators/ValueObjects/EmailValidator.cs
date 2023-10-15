@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Horizon.Shared.Messages;
 using Horizon.Domain.ValueObjects;
 
 namespace Horizon.Domain.Validators.ValueObjects;
@@ -9,7 +10,7 @@ public class EmailValidator : AbstractValidator<Email>
     {
         RuleFor(email => email.Address)
             .EmailAddress()
-            .WithMessage("Invalid email address")
+            .WithMessage(string.Format(Messages.InvalidField, Fields.Email))
             .OverridePropertyName("Email");
     }
 }
