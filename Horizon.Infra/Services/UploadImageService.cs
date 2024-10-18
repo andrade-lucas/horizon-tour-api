@@ -18,7 +18,7 @@ public class UploadImageService : IUploadImageService
 
     public async Task<string> UploadBase64ImageAsync(string base64Image, string container, string imageName)
     {
-        var blobConnection = _configuration.GetConnectionString("AzureBlob");
+        var blobConnection = _configuration.GetValue<string>("AzureBlob");
 
         var data = new Regex(@"^data:image\/[a-z]+;base64,").Replace(base64Image, "");
         var fileExtension = GetFileExtension.FromBase64String(data);
